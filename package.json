@@ -1,0 +1,22 @@
+{
+  "name": "papamama",
+  "version": "1.0.0",
+  "description": "保育園検索アプリ",
+  "directories": {
+    "doc": "doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codeforchiba/papamama.git"
+  },
+  "author": "code for chiba",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codeforchiba/papamama/issues"
+  },
+  "homepage": "https://github.com/codeforchiba/papamama#readme",
+  "devDependencies": {
+    "browser-sync": "^2.11.1",
+    "gulp": "^3.9.1"
+  }
+}
