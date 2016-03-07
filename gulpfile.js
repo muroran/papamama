@@ -12,7 +12,7 @@ gulp.task("serve", () => {
   });
 
   // 監視対象ファイル一覧
-  gulp.watch(["css/**", "data/**", "image/**", "js/**", "index.html"], () => {
+  gulp.watch(["css/**/*", "data/**/*", "image/**/*", "js/**/*", "index.html"], () => {
     browserSync.reload();
   });
 });
@@ -64,6 +64,32 @@ gulp.task("data-elementary", (cb) => {
         return cityCode && cityCode.indexOf('121') === 0;
       });
       fs.writeFileSync( 'data/Elementary.geojson', JSON.stringify(json) );
+    }
+    cb();
+  });
+});
+
+// 学校のデータ作成
+gulp.task("data-school", (cb) => {
+  shapefile.read('data_org/p29-13_12.shp', {encoding: 'shift_jis'}, (err, json) => {
+    if(err) {
+      console.log(err);
+    } else {
+      var features = json.features.filter((feature) => {
+        var cityCode = feature.properties.P29_001;
+        feature.properties.label = feature.properties.P29_005.replace('学校', '');
+        return cityCode && cityCode.indexOf('121') === 0;
+      });
+      // 小学校
+      json.features = features.filter((feature) => {
+        return feature.properties.P29_004 === '16001';
+      });
+      fs.writeFileSync( 'data/Elementary_loc.geojson', JSON.stringify(json) );
+      // 中学校
+      json.features = features.filter((feature) => {
+        return feature.properties.P29_004 === '16002' || feature.properties.P29_004 === '16003';
+      });
+      fs.writeFileSync( 'data/MiddleSchool_loc.geojson', JSON.stringify(json) );
     }
     cb();
   });
