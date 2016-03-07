@@ -36,3 +36,35 @@ gulp.task("data-wards", (cb) => {
     cb();
   });
 });
+
+// 中学校区域のデータ更新
+gulp.task("data-middleSchool", (cb) => {
+  shapefile.read('data_org/A32-13_12.shp', {encoding: 'shift_jis'}, (err, json) => {
+    if(err) {
+      console.log(err);
+    } else {
+      json.features = json.features.filter((feature) => {
+        var cityCode = feature.properties.A32_001;
+        return cityCode && cityCode.indexOf('121') === 0;
+      });
+      fs.writeFileSync( 'data/MiddleSchool.geojson', JSON.stringify(json) );
+    }
+    cb();
+  });
+});
+
+// 小学校区域のデータ更新
+gulp.task("data-elementary", (cb) => {
+  shapefile.read('data_org/A27-10_12-g_SchoolDistrict.shp', {encoding: 'shift_jis'}, (err, json) => {
+    if(err) {
+      console.log(err);
+    } else {
+      json.features = json.features.filter((feature) => {
+        var cityCode = feature.properties.A27_005;
+        return cityCode && cityCode.indexOf('121') === 0;
+      });
+      fs.writeFileSync( 'data/Elementary.geojson', JSON.stringify(json) );
+    }
+    cb();
+  });
+});
