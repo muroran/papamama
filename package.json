@@ -17,6 +17,7 @@
   "homepage": "https://github.com/codeforchiba/papamama#readme",
   "devDependencies": {
     "browser-sync": "^2.11.1",
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "shapefile": "^0.3.1"
   }
 }
