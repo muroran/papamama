@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var browserSync = require("browser-sync");
 var shapefile = require('shapefile');
 var fs = require('fs');
+var inside = require('point-in-polygon');
 
 // ローカルサーバ起動
 gulp.task("serve", () => {
@@ -90,6 +91,38 @@ gulp.task("data-school", (cb) => {
         return feature.properties.P29_004 === '16002' || feature.properties.P29_004 === '16003';
       });
       fs.writeFileSync( 'data/MiddleSchool_loc.geojson', JSON.stringify(json) );
+    }
+    cb();
+  });
+});
+
+// 駅のデータ更新
+gulp.task("data-station", (cb) => {
+  shapefile.read('data_org/N02-14_Station.shp', {encoding: 'shift_jis'}, (err, json) => {
+    if(err) {
+      console.log(err);
+    } else {
+      var wardsJson = JSON.parse(fs.readFileSync('data/wards.geojson', 'utf8'));
+      json.features = json.features.filter((feature) => {
+        var ward = wardsJson.features.find((wardFeature) => {
+          return inside(feature.geometry.coordinates[0], wardFeature.geometry.coordinates[0]);
+        });
+        return !!(ward);
+      });
+
+      json.features = json.features.map((feature) => {
+        var data = {type: "Feature", properties: {}, geometry: {type: "Point", coordinates:[]}};
+        data.properties.line = feature.properties.N02_003;
+        data.properties.station_name = feature.properties.N02_005;
+        data.properties.shubetsu = feature.properties.N02_004;
+        data.properties.lon = (feature.geometry.coordinates[0][0] + feature.geometry.coordinates[1][0]) / 2;
+        data.properties.lat = (feature.geometry.coordinates[0][1] + feature.geometry.coordinates[1][1]) / 2;
+
+        data.geometry.coordinates[0] = data.properties.lon;
+        data.geometry.coordinates[1] = data.properties.lat;
+        return data;
+      });
+      fs.writeFileSync( 'data/station.geojson', JSON.stringify(json) );
     }
     cb();
   });
