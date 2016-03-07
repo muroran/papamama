@@ -77,7 +77,7 @@ gulp.task("data-school", (cb) => {
     } else {
       var features = json.features.filter((feature) => {
         var cityCode = feature.properties.P29_001;
-        feature.properties.label = feature.properties.P29_005.replace('学校', '');
+        feature.properties.label = feature.properties.P29_005.replace(/学校$/, '');
         return cityCode && cityCode.indexOf('121') === 0;
       });
       // 小学校
