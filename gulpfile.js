@@ -127,3 +127,46 @@ gulp.task("data-station", (cb) => {
     cb();
   });
 });
+
+// 保育園等のデータ更新
+gulp.task("data-nursery", (cb) => {
+  shapefile.read('data_org/P14_12.shp', {encoding: 'shift_jis'}, (err, json) => {
+    if(err) {
+      console.log(err);
+    } else {
+      json.features = json.features.filter((feature) => {
+        var code = feature.properties.P14_006;
+        var cityName = feature.properties.P14_002;
+        return cityName.indexOf('千葉市') === 0
+          && (code === '801' || code === '802' || code === '803' || code === '804' || code === '805');
+      });
+
+      json.features.forEach((feature) => {
+        feature.properties.Name = feature.properties.P14_007;
+        feature.properties.Label = feature.properties.P14_007;
+        feature.properties.Add1 = feature.properties.P14_002;
+        feature.properties.Add2 = feature.properties.P14_003;
+        var code = feature.properties.P14_006;
+        switch (code) {
+          case '801':
+          feature.properties.Type = '認可保育所'
+          break;
+          case '802':
+          feature.properties.Type = '認可保育所'
+          break;
+          case '803':
+          feature.properties.Type = '認可外'
+          break;
+          case '804':
+          feature.properties.Type = '幼稚園'
+          break;
+          case '805':
+          feature.properties.Type = '認可保育所'
+          break;
+        }
+      });
+      fs.writeFileSync( 'data/nurseryFacilities.geojson', JSON.stringify(json) );
+    }
+    cb();
+  });
+});
