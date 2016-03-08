@@ -41,10 +41,11 @@ gulpが使用できる場合は次のコマンドで環境構築が完了しま�
 
 ## ブランチについて
 
-ブランチ名|用途
-master|code for sapporoのmasterブランチと完全同期するためのブランチ。このブランチに対して作業を行うことはない。
-chiba/master|code for chibaのmasterブランチ。本番にリリースされているソースと同じもの。開発には使用しない。
-chiba/develop|code for chibaの開発ブランチ。普段の開発はこのブランチを使用して行われる。
+ブランチ名 | 用途
+--- | ---
+master | code for sapporoのmasterブランチと完全同期するためのブランチ。このブランチに対して作業を行うことはない。
+chiba/master | code for chibaのmasterブランチ。本番にリリースされているソースと同じもの。開発には使用しない。
+chiba/develop | code for chibaの開発ブランチ。普段の開発はこのブランチを使用して行われる。
 
 ## アプリケーションに必要なデータの作成方法
 国土数値情報ダウンロードサービスから以下のデータを取得してくる
