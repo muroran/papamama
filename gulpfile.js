@@ -3,6 +3,7 @@ var browserSync = require("browser-sync");
 var shapefile = require('shapefile');
 var fs = require('fs');
 var inside = require('point-in-polygon');
+var runSequence = require('run-sequence');
 
 // ローカルサーバ起動
 gulp.task("serve", () => {
@@ -18,8 +19,9 @@ gulp.task("serve", () => {
   });
 });
 
-gulp.task("updatedata", () => {
-
+// 全データ更新
+gulp.task("updatedata", (cb) => {
+  runSequence(['data-wards', 'data-middleSchool', 'data-elementary', 'data-school'], 'data-station', 'data-nursery', cb);
 });
 
 // 行政区域のデータ更新
