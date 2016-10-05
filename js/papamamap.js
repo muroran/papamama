@@ -449,6 +449,27 @@ Papamamap.prototype.getPopupContent = function(feature)
 };
 
 /**
+ * お気に入り追加されているか
+ */
+Papamamap.prototype.isFavorite = function(feature) {
+  return feature.get('favorite') || false;
+}
+
+/**
+ * お気に入り追加
+ */
+Papamamap.prototype.addFavorite = function(feature) {
+  feature.set('favorite', true);
+}
+
+/**
+ * お気に入り削除
+ */
+Papamamap.prototype.removeFavorite = function(feature) {
+  feature.set('favorite', false);
+}
+
+/**
  * 円を消す
  *
  * @param  {[type]} radius      [description]

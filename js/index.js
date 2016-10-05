@@ -172,6 +172,30 @@ $('#mainPage').on('pageshow', function() {
 			papamamap.animatedMove(coord[0], coord[1], false);
 			var content = papamamap.getPopupContent(feature);
 			$("#popup-content").html(content);
+
+			// ナビ部
+			var isFavorite = papamamap.isFavorite(feature);
+			var $addFavoriteBtn = $('#add-favorite');
+			var $removeFavoriteBtn = $('#remove-favorite');
+			if (isFavorite) {
+				$addFavoriteBtn.hide();
+				$removeFavoriteBtn.show();
+			} else {
+				$addFavoriteBtn.show();
+				$removeFavoriteBtn.hide();
+			}
+			$addFavoriteBtn.click(function(){
+				papamamap.addFavorite(feature);
+				$addFavoriteBtn.hide();
+				$removeFavoriteBtn.show();
+			});
+			$removeFavoriteBtn.click(function(){
+				papamamap.removeFavorite(feature);
+				$addFavoriteBtn.show();
+				$removeFavoriteBtn.hide();
+
+			});
+
 			$('#popup').show();
 			view = map.getView();
 			view.setCenter(coord);
