@@ -13,6 +13,12 @@ var nurseryFacilities = {};
 // 中心座標変更セレクトボックス用データ
 var moveToList = [];
 
+// フィルター
+var filter = new FacilityFilter();
+
+// お気に入り
+var favoriteStore = new FavoriteStore();
+
 // マップサーバ一覧
 var mapServerList = {
 	'bing-road': {
@@ -78,8 +84,12 @@ $(window).on("orientationchange", function() {
 	map.setTarget('map');
 });
 
-
+var initialized = false;
 $('#mainPage').on('pageshow', function() {
+	if(initialized) {
+		return;
+	}
+	initialized = true;
 	resizeMapDiv();
 
 	// 地図レイヤー定義
@@ -174,7 +184,7 @@ $('#mainPage').on('pageshow', function() {
 			$("#popup-content").html(content);
 
 			// ナビ部
-			var isFavorite = papamamap.isFavorite(feature);
+			var isFavorite = favoriteStore.isFavorite(feature);
 			var $addFavoriteBtn = $('#add-favorite');
 			var $removeFavoriteBtn = $('#remove-favorite');
 			if (isFavorite) {
@@ -184,16 +194,15 @@ $('#mainPage').on('pageshow', function() {
 				$addFavoriteBtn.show();
 				$removeFavoriteBtn.hide();
 			}
-			$addFavoriteBtn.click(function(){
-				papamamap.addFavorite(feature);
+			$addFavoriteBtn.off('click').on('click',function(){
+				favoriteStore.addFavorite(feature);
 				$addFavoriteBtn.hide();
 				$removeFavoriteBtn.show();
 			});
-			$removeFavoriteBtn.click(function(){
-				papamamap.removeFavorite(feature);
+			$removeFavoriteBtn.off('click').on('click',function(){
+				favoriteStore.removeFavorite(feature);
 				$addFavoriteBtn.show();
 				$removeFavoriteBtn.hide();
-
 			});
 
 			$('#popup').show();
@@ -367,7 +376,6 @@ $('#mainPage').on('pageshow', function() {
 
 		// フィルター適用時
 		if(Object.keys(conditions).length > 0) {
-			filter = new FacilityFilter();
 			newGeoJson = filter.getFilteredFeaturesGeoJson(conditions, nurseryFacilities);
 			papamamap.addNurseryFacilitiesLayer(newGeoJson);
 			$('#btnFilter').css('background-color', '#3388cc');
@@ -495,4 +503,12 @@ $('#mainPage').on('pageshow', function() {
 		return;
 	}
 
+});
+
+/**
+ * お気に入り一覧画面
+ */
+$('#favorite-list').on('pageshow', function() {
+	var favoriteList = filter.getFavoriteFeatures(nurseryFacilities);
+	console.log(favoriteList);
 });

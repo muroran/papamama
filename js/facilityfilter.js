@@ -218,3 +218,13 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
     newGeoJson.features = features;
     return newGeoJson;
 };
+
+/**
+ * お気に入りの園を返す
+ */
+FacilityFilter.prototype.getFavoriteFeatures = function (nurseryFacilities){
+  var favoriteList = favoriteStore.getFavoriteList();
+  return nurseryFacilities.features.filter(function (item,idx) {
+    return favoriteList.indexOf(item.properties['Add1']+item.properties['Add2']) >= 0;
+  });
+}
