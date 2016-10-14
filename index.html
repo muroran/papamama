@@ -172,7 +172,35 @@
         </div>
 </div>
         <div data-role="page" id="favorite-list" >
-          <a href="#mainPage">戻る</a>
+
+        	<div data-role="header" role="banner" class="ui-header ui-bar-inherit" data-add-back-btn="true">
+        		<h1 class="ui-title" role="heading" aria-level="1">お気に入り一覧</h1>
+        	</div><!-- /header -->
+
+        	<div role="main" class="ui-content">
+            <form>
+      				<fieldset data-role="controlgroup" class="ui-controlgroup ui-controlgroup-vertical ui-corner-all">
+                <div class="ui-controlgroup-controls ">
+        					<div class="ui-checkbox">
+                    <label for="checkbox-v-2a" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-first-child ui-checkbox-on">One</label>
+                    <input type="checkbox" name="checkbox-v-2a" id="checkbox-v-2a" data-cacheval="false">
+                  </div>
+        					<div class="ui-checkbox">
+                    <label for="checkbox-v-2b" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-on">Two</label>
+                    <input type="checkbox" name="checkbox-v-2b" id="checkbox-v-2b" data-cacheval="false">
+                  </div>
+        					<div class="ui-checkbox">
+                    <label for="checkbox-v-2c" class="ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-last-child ui-checkbox-on">Three</label>
+                    <input type="checkbox" name="checkbox-v-2c" id="checkbox-v-2c" data-cacheval="false">
+                  </div>
+                </div>
+      				</fieldset>
+      			</form>
+        	</div><!-- /content -->
+
+        	<div data-role="footer" role="contentinfo" class="ui-footer ui-bar-inherit">
+        		<h4 class="ui-title" role="heading" aria-level="1">Page Footer</h4>
+        	</div><!-- /footer -->
         </div>
 
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
