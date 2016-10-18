@@ -4,6 +4,10 @@ var shapefile = require('shapefile');
 var fs = require('fs');
 var inside = require('point-in-polygon');
 var runSequence = require('run-sequence');
+var csv = require('csv');
+var iconv = require('iconv-lite');
+var sutil = require('line-stream-util')
+var GeoJSON = require('geojson');
 
 // ローカルサーバ起動
 gulp.task("serve", () => {
@@ -130,8 +134,8 @@ gulp.task("data-station", (cb) => {
   });
 });
 
-// 保育園等のデータ更新
-gulp.task("data-nursery", (cb) => {
+// 保育園等のデータ更新(国土数値情報　ダウンロードサービスベース)
+gulp.task("data-nursery-bk", (cb) => {
   shapefile.read('data_org/P14_12.shp', {encoding: 'shift_jis'}, (err, json) => {
     if(err) {
       console.log(err);
@@ -171,4 +175,34 @@ gulp.task("data-nursery", (cb) => {
     }
     cb();
   });
+});
+
+// 保育園等のデータ更新(千葉市保育所データCSV)
+gulp.task("data-nursery", (cb) => {
+  var fileName = 'data_org/千葉市保育所データ.csv';
+  fs.createReadStream(fileName)
+    .pipe(sutil.head(1)) // get head lines
+    .pipe(sutil.split())
+    .setEncoding('utf8')
+    .pipe(csv.parse())
+    .on('data', function(headers){
+
+      var dataList = [];
+      fs.createReadStream(fileName)
+      .pipe(iconv.decodeStream('shift_jis'))
+      .pipe(csv.parse())
+      .pipe(csv.transform(function(record){
+        var json = {};
+        record.forEach(function(data, index) {
+          json[headers[index]] = data;
+        });
+        return json;
+      }))
+      .on('data', function(data) {
+        dataList.push(data)
+      }).on('end', function(){
+        fs.writeFileSync( 'data/nurseryFacilities.geojson', JSON.stringify(GeoJSON.parse(dataList.slice(1), {Point: ['Y', 'X']})) );
+        cb();
+      });
+    });
 });
