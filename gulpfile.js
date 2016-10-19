@@ -144,7 +144,8 @@ gulp.task("data-nursery-bk", (cb) => {
         var code = feature.properties.P14_006;
         var cityName = feature.properties.P14_002;
         return cityName.indexOf('千葉市') === 0
-          && (code === '801' || code === '802' || code === '803' || code === '804' || code === '805');
+          //&& (code === '801' || code === '802' || code === '803' || code === '804' || code === '805');
+          && (code === '804');
       });
 
       json.features.forEach((feature) => {
@@ -171,7 +172,7 @@ gulp.task("data-nursery-bk", (cb) => {
           break;
         }
       });
-      fs.writeFileSync( 'data/nurseryFacilities.geojson', JSON.stringify(json) );
+      fs.writeFileSync( 'data/nurseryFacilities_temp.geojson', JSON.stringify(json) );
     }
     cb();
   });
@@ -179,7 +180,7 @@ gulp.task("data-nursery-bk", (cb) => {
 
 // 保育園等のデータ更新(千葉市保育所データCSV)
 gulp.task("data-nursery", (cb) => {
-  var fileName = 'data_org/千葉市保育所データ.csv';
+  var fileName = 'data_org/nurseryData.csv';
   fs.createReadStream(fileName)
     .pipe(sutil.head(1)) // get head lines
     .pipe(sutil.split())
