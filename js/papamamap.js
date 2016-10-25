@@ -364,20 +364,20 @@ Papamamap.prototype.getPopupContent = function(feature)
     var night   = feature.get('夜間') ? feature.get('夜間') : feature.get('Night');
     var h24     = feature.get('H24') ? feature.get('H24') : feature.get('H24');
 
-    if( temp != null || holiday != null || night != null || h24 != null) {
+    if( temp === 'Y' || holiday === 'Y' || night === 'Y' || h24 === 'Y') {
         content += '<tr>';
         content += '<th></th>';
         content += '<td>';
-        if (temp != null) {
+        if (temp === 'Y') {
             content += '一時保育 ';
         }
-        if (holiday != null) {
+        if (holiday === 'Y') {
             content += '休日保育 ';
         }
-        if (night != null) {
+        if (night === 'Y') {
             content += '夜間保育 ';
         }
-        if (h24 != null) {
+        if (h24 === 'Y') {
             content += '24時間 ';
         }
         content += '</td>';
@@ -386,7 +386,7 @@ Papamamap.prototype.getPopupContent = function(feature)
 
     var type = feature.get('種別') ? feature.get('種別') : feature.get('Type');
     var proof = feature.get('証明') ? feature.get('証明') : feature.get('Proof');
-    if(type == "認可外" && proof != null) {
+    if(type == "認可外" && proof === 'Y') {
         content += '<tr>';
         content += '<th>監督基準</th>';
         content += '<td>';
@@ -395,7 +395,7 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '</tr>';
     }
     var vacancy = feature.get('Vacancy');
-    if(type == "認可保育所" && vacancy != null) {
+    if(type == "認可保育所" && vacancy === 'Y') {
         content += '<tr>';
         content += '<th>欠員</th>';
         content += '<td>';
