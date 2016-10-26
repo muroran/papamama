@@ -195,8 +195,7 @@ gulp.task("data-nursery", (cb) => {
       .pipe(csv.transform(function(record){
         var json = {};
         record.forEach(function(data, index) {
-          var d = data != 'N' ? data : null;
-          json[headers[index]] = d ? d : null;
+          json[headers[index]] = data ? data : null;
         });
         return json;
       }))
