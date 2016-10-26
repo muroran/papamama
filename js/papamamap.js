@@ -360,7 +360,7 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '</tr>';
     }
     var temp    = feature.get('一時') ? feature.get('一時') : feature.get('Temp');
-    var holiday = feature.get('休日') ? feature.get('休日') : feature.get('holiday');
+    var holiday = feature.get('休日') ? feature.get('休日') : feature.get('Holiday');
     var night   = feature.get('夜間') ? feature.get('夜間') : feature.get('Night');
     var h24     = feature.get('H24') ? feature.get('H24') : feature.get('H24');
 
