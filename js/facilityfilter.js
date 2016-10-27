@@ -95,7 +95,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
     if(conditions['ninkaIchijiHoiku']) {
         filterfunc = function (item,idx) {
             var temp = item.properties['一時'] ? item.properties['一時'] : item.properties['Temp'];
-            if(temp !== null) {
+            if(temp === 'Y') {
                 return true;
             }
         };
@@ -105,7 +105,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
     if(conditions['ninkaYakan']) {
         filterfunc = function (item,idx) {
             var night = item.properties['夜間'] ? item.properties['夜間'] : item.properties['Night'];
-            if(night !== null) {
+            if(night === 'Y') {
                 return true;
             }
         };
@@ -115,7 +115,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
     if(conditions['ninkaKyujitu']) {
         filterfunc = function (item,idx) {
             var holiday = item.properties['休日'] ? item.properties['休日'] : item.properties['Holiday'];
-            if(holiday !== null) {
+            if(holiday === 'Y') {
                 return true;
             }
         };
@@ -124,7 +124,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
     if(conditions['ninkaVacancy']) {
         filterfunc = function (item,idx) {
             var vacancy = item.properties['Vacancy'] ? item.properties['Vacancy'] : item.properties['Vacancy'];
-            if(vacancy !== null) {
+            if(vacancy === 'Y') {
                 return true;
             }
         };
@@ -174,7 +174,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
                 }
                 var h24   = item.properties['H24'] ? item.properties['H24'] : item.properties['H24'];
                 var close = item.properties['終園時間'] ? item.properties['終園時間'] : item.properties['Close'];
-                if(h24 !== null || $.inArray(close, checkAry) >= 0) {
+                if(h24 === 'Y' || $.inArray(close, checkAry) >= 0) {
                     return true;
                 }
             };
@@ -186,7 +186,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
     if(conditions['ninkagai24H']) {
         filterfunc = function (item,idx) {
             var h24 = item.properties['H24'] ? item.properties['H24'] : item.properties['H24'];
-            if(h24 !== null) {
+            if(h24 === 'Y') {
                 return true;
             }
         };
@@ -196,7 +196,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
     if(conditions['ninkagaiShomei']) {
         filterfunc = function (item,idx) {
             var proof = item.properties['証明'] ? item.properties['証明'] : item.properties['Proof'];
-            if(proof !== null) {
+            if(proof === 'Y') {
                 return true;
             }
         };

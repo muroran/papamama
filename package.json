@@ -5,16 +5,20 @@
   "directories": {
     "doc": "doc"
   },
+  "scripts": {
+    "start": "gulp serve",
+    "updatedata": "gulp updatedata"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codeforchiba/papamama.git"
+    "url": "git+https://github.com/og-kyogikai/papamama.git"
   },
   "author": "code for chiba",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/codeforchiba/papamama/issues"
+    "url": "https://github.com/og-kyogikai/papamama/issues"
   },
-  "homepage": "https://github.com/codeforchiba/papamama#readme",
+  "homepage": "https://github.com/og-kyogikai/papamama#readme",
   "devDependencies": {
     "browser-sync": "^2.11.1",
     "csv": "^1.1.0",
