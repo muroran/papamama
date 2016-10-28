@@ -399,7 +399,7 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<tr>';
         content += '<th>欠員</th>';
         content += '<td>';
-        content += '<a href="https://www.city.chiba.jp/kodomomirai/kodomomirai/unei/list_hoiku.html" target="_blank">' + vacancy + '</a>';
+        content += '<a href="http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html" target="_blank">空きあり</a>';
         var vacancyDate = feature.get('VacancyDate');
         if (vacancyDate != null) {
             content += " (" + vacancyDate + ")";
