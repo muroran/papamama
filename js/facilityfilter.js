@@ -224,7 +224,11 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
  */
 FacilityFilter.prototype.getFavoriteFeatures = function (nurseryFacilities){
   var favoriteList = favoriteStore.getFavoriteList();
-  return nurseryFacilities.features.filter(function (item,idx) {
-    return favoriteList.indexOf(item.properties['Add1']+item.properties['Add2']) >= 0;
-  });
+  if (nurseryFacilities.features) {
+    return nurseryFacilities.features.filter(function (item,idx) {
+      return favoriteList.indexOf(favoriteStore.getId(item)) >= 0;
+    });
+  } else {
+    return [];
+  }
 }
