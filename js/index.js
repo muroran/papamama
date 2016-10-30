@@ -7,13 +7,17 @@ var bing_api_key = 'AhGQykUKW2-u1PwVjLwQkSA_1rCTFESEC7bCZ0MBrnzVbVy7KBHsmLgwW_iR
 // map
 var map;
 
+// 保育施設JSON格納用オブジェクト
+var nurseryFacilities = {};
+
+// 園一覧を取得
 var papamamap = new Papamamap();
 var loadNurseryFacilitiesPromise = papamamap.loadNurseryFacilitiesJson(function(data){
 	nurseryFacilities = data;
 });
 
-// 保育施設JSON格納用オブジェクト
-var nurseryFacilities = {};
+// 比較する園の一覧
+var compareNurseries = [];
 
 // 中心座標変更セレクトボックス用データ
 var moveToList = [];
@@ -510,6 +514,7 @@ $('#mainPage').on('pageshow', function() {
 /**
  * お気に入り一覧画面
  */
+// 表示処理
 $('#favorite-list').on('pageshow', function() {
 	var favoriteList = filter.getFavoriteFeatures(nurseryFacilities);
 	var $items = $("#favorite-items");
@@ -526,10 +531,45 @@ $('#favorite-list').on('pageshow', function() {
 		var element = "";
 		element += "<div class='ui-checkbox'>";
 		element += "  <label for='" + id + "' class='" + styleClass + "'>" + item.properties['Name'] + "</label>";
-		element += "  <input type='checkbox' name='" + id + "' id='" + id + "' data-cacheval=" + false + ">";
+		element += "  <input type='checkbox' value='" + id + "' id='" + id + "' " + (compareNurseries.indexOf(id) >= 0 ? "checked='checked'" : "") + ">";
 		element += "</div>"
 
 		$items.append(element);
 	});
 	$items.trigger('create');
+
+	onChangeCheckbox();
+});
+
+// チェックボックス選択時
+var onChangeCheckbox = function() {
+	var favoriteCheckboxes = $('#favorite-list').find("#favorite-items").find(".ui-checkbox");
+	compareNurseries = favoriteCheckboxes.find(":checked").map(function(){
+	  return $(this).val();
+	}).get();
+
+	if (compareNurseries.length >= 2) {
+		favoriteCheckboxes.each(function(){
+			var $checkbox = $(this).find(":checkbox");
+			if (!$checkbox.is(":checked")) {
+				$(this).addClass("ui-state-disabled");
+				$checkbox.prop("disabled", true);
+			}
+		});
+		$("#compare-btn").removeClass("ui-state-disabled");
+		$("#compare-btn").prop("disabled", false);
+	} else {
+		favoriteCheckboxes.each(function(){
+			$(this).removeClass("ui-state-disabled");
+			$(this).find(":checkbox").prop("disabled", false);
+		});
+		$("#compare-btn").addClass("ui-state-disabled");
+		$("#compare-btn").prop("disabled", true);
+	}
+};
+$("#favorite-list").on("change", "#favorite-items .ui-checkbox :checkbox", onChangeCheckbox);
+
+// 比較するボタン押下時
+$("#favorite-list").on("change", "#compare-btn", function() {
+
 });

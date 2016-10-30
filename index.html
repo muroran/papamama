@@ -173,8 +173,9 @@
 </div>
         <div data-role="page" id="favorite-list" >
 
-        	<div data-role="header" role="banner" class="ui-header ui-bar-inherit" data-add-back-btn="true">
+        	<div data-role="header" role="banner" class="ui-header ui-bar-inherit">
         		<h1 class="ui-title" role="heading" aria-level="1">お気に入り一覧</h1>
+            <a href="#mainPage" data-icon="carat-l" data-iconpos="notext" class="ui-link ui-btn-left ui-btn ui-icon-carat-l ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Back</a>
         	</div><!-- /header -->
 
         	<div role="main" class="ui-content">
@@ -184,7 +185,18 @@
                 </div>
       				</fieldset>
       			</form>
+            <a href="#compare-page" class="ui-btn ui-icon-bullets ui-btn-icon-left ui-corner-all ui-btn-b" id="compare-btn">比較する</a>
         	</div><!-- /content -->
+        </div>
+
+        <div data-role="page" id="compare-page" >
+          <div data-role="header" role="banner" class="ui-header ui-bar-inherit">
+        		<h1 class="ui-title" role="heading" aria-level="1">比較</h1>
+            <a href="#favorite-list" data-icon="carat-l" data-iconpos="notext" class="ui-link ui-btn-left ui-btn ui-icon-carat-l ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Back</a>
+        	</div><!-- /header -->
+
+          <div role="main" class="ui-content">
+          </div>
         </div>
 
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
