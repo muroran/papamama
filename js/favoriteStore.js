@@ -35,7 +35,11 @@ FavoriteStore.prototype.removeFavorite = function(feature) {
  * IDの取得
  */
 FavoriteStore.prototype.getId = function(feature) {
-  return feature.get('Add1') + feature.get('Add2');
+  if (feature.get) {
+    return feature.get('Add1') + feature.get('Add2');
+  } else if (feature.properties) {
+    return feature.properties['Add1']+feature.properties['Add2']
+  }
 }
 
 /**
