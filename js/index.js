@@ -202,11 +202,13 @@ $('#mainPage').on('pageshow', function() {
 			}
 			$addFavoriteBtn.off('click').on('click',function(){
 				favoriteStore.addFavorite(feature);
+				papamamap.updateNurseryStyle(feature);
 				$addFavoriteBtn.hide();
 				$removeFavoriteBtn.show();
 			});
 			$removeFavoriteBtn.off('click').on('click',function(){
 				favoriteStore.removeFavorite(feature);
+				papamamap.updateNurseryStyle(feature);
 				$addFavoriteBtn.show();
 				$removeFavoriteBtn.hide();
 			});

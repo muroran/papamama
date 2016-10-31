@@ -9,65 +9,20 @@ var featureStyleList = {
 	'認可保育所': { color: '#6EE100', img: 'image/018.png'}
 };
 
-/**
- * 認可保育所向けスタイル
- * @param  {[type]} feature    [description]
- * @param  {[type]} resolution [description]
- * @return {[type]}            [description]
- */
-var ninkaStyleFunction = function(feature, resolution)
-{
-	var facilityTypeName = feature.get('種別') ? feature.get('種別') : feature.get('Type');
-	var style = [];
-	if(facilityTypeName === "認可保育所") {
-		featureStyle = featureStyleList[facilityTypeName];
-		style        = nurseryStyleFunction(feature, resolution, featureStyle);
-	}
-	return style;
-};
-
-/**
- * 認可外保育所向けスタイル
- * @param  {[type]} feature    [description]
- * @param  {[type]} resolution [description]
- * @return {[type]}            [description]
- */
-var ninkagaiStyleFunction = function(feature, resolution)
-{
-	var facilityTypeName = feature.get('種別') ? feature.get('種別') : feature.get('Type');
-	var style = [];
-	if(facilityTypeName === "認可外") {
-		featureStyle = featureStyleList[facilityTypeName];
-		style        = nurseryStyleFunction(feature, resolution, featureStyle);
-	}
-	return style;
-};
-
-/**
- * 幼稚園向けスタイル
- * @param  {[type]} feature    [description]
- * @param  {[type]} resolution [description]
- * @return {[type]}            [description]
- */
-var kindergartenStyleFunction = function(feature, resolution)
-{
-	var facilityTypeName = feature.get('種別') ? feature.get('種別') : feature.get('Type');
-	var style = [];
-	if(facilityTypeName === "幼稚園") {
-		featureStyle = featureStyleList[facilityTypeName];
-		style        = nurseryStyleFunction(feature, resolution, featureStyle);
-	}
-	return style;
-};
+var favoriteColor = '#FF0';
 
 /**
  * 保育施設共通のスタイル定義
  * @param  {[type]} feature      [description]
  * @param  {[type]} resolution   [description]
- * @param  {[type]} featureStyle [description]
  * @return {[type]}              [description]
  */
-var nurseryStyleFunction = function(feature, resolution, featureStyle) {
+var nurseryStyleFunction = function(feature, resolution) {
+	var facilityTypeName = feature.get('種別') ? feature.get('種別') : feature.get('Type');
+	var featureStyle = _.clone(featureStyleList[facilityTypeName]);
+	if (favoriteStore.isFavorite(feature)) {
+		featureStyle.color = favoriteColor;
+	}
 	var radius = 15;
 	var background = new ol.style.Circle({
 		radius: radius,

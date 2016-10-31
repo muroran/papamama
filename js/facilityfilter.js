@@ -232,3 +232,17 @@ FacilityFilter.prototype.getFavoriteFeatures = function (nurseryFacilities){
     return [];
   }
 }
+
+/**
+ * idに一致した園を返します。
+ */
+FacilityFilter.prototype.getFeatureById = function(id) {
+  var favoriteList = favoriteStore.getFavoriteList();
+  if (nurseryFacilities.features) {
+    return nurseryFacilities.features.find(function (item,idx) {
+      return favoriteStore.getId(item) === id;
+    });
+  } else {
+    return null;
+  }
+}
