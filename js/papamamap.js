@@ -8,6 +8,7 @@ window.Papamamap = function() {
     this.map = null;
     this.centerLatOffsetPixel = 75;
     this.viewCenter = [];
+    this.featureOverlays = {};
 };
 
 /**
@@ -157,38 +158,49 @@ Papamamap.prototype.addNurseryFacilitiesLayer = function(facilitiesData)
     }
 
     // 幼稚園
-    this.map.addLayer(
-        new ol.layer.Vector({
-            source: new ol.source.GeoJSON({
-                projection: 'EPSG:3857',
-                object: facilitiesData
-            }),
-            name: 'layerKindergarten',
-            style: kindergartenStyleFunction
-        })
-    );
+    var layerKindergarten = new ol.layer.Vector({
+        source: new ol.source.GeoJSON({
+            projection: 'EPSG:3857',
+            object: {
+              type: facilitiesData.type,
+              features: _.filter(facilitiesData.features, function(data) {return data.properties['Type'] === '幼稚園'})
+            }
+        }),
+        name: 'layerKindergarten',
+        style: nurseryStyleFunction
+    });
+    this.map.addLayer(layerKindergarten);
+    this.featureOverlays["幼稚園"] = layerKindergarten;
+
     // 認可外
-    this.map.addLayer(
-        new ol.layer.Vector({
-            source: new ol.source.GeoJSON({
-                projection: 'EPSG:3857',
-                object: facilitiesData
-            }),
-            name: 'layerNinkagai',
-            style: ninkagaiStyleFunction
-        })
-    );
+    var layerNinkagai = new ol.layer.Vector({
+        source: new ol.source.GeoJSON({
+            projection: 'EPSG:3857',
+            object: {
+              type: facilitiesData.type,
+              features: _.filter(facilitiesData.features, function(data) {return data.properties['Type'] === '認可外'})
+            }
+        }),
+        name: 'layerNinkagai',
+        style: nurseryStyleFunction
+    });
+    this.map.addLayer(layerNinkagai);
+    this.featureOverlays["認可外"] = layerNinkagai;
+
     // 認可
-    this.map.addLayer(
-        new ol.layer.Vector({
-            source: new ol.source.GeoJSON({
-                projection: 'EPSG:3857',
-                object: facilitiesData
-            }),
-            name: 'layerNinka',
-            style: ninkaStyleFunction
-        })
-    );
+    var layerNinka = new ol.layer.Vector({
+        source: new ol.source.GeoJSON({
+            projection: 'EPSG:3857',
+            object: {
+              type: facilitiesData.type,
+              features: _.filter(facilitiesData.features, function(data) {return data.properties['Type'] === '認可保育所'})
+            }
+        }),
+        name: 'layerNinka',
+        style: nurseryStyleFunction
+    });
+    this.map.addLayer(layerNinka);
+    this.featureOverlays["認可保育所"] = layerNinka;
 };
 
 /**
@@ -554,3 +566,23 @@ Papamamap.prototype.switchLayer = function(layerName, visible) {
         }
     });
 };
+
+Papamamap.prototype.updateNurseryStyle = function(feature) {
+  var type = feature.get('種別') ? feature.get('種別') :  feature.get('Type');
+  if(type === undefined) {
+    return;
+  }
+  var overlay = this.featureOverlays[type];
+  var id = favoriteStore.getId(feature);
+
+  var features = overlay.getSource().getFeatures();
+  if (features != null && features.length > 0) {
+    for (x in features) {
+      if (id === favoriteStore.getId(features[x])) {
+        overlay.getSource().removeFeature(features[x]);
+        overlay.getSource().addFeature(features[x]);
+        break;
+      }
+    }
+  }
+}
