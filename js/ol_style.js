@@ -20,16 +20,16 @@ var favoriteColor = '#FF0';
 var nurseryStyleFunction = function(feature, resolution) {
 	var facilityTypeName = feature.get('種別') ? feature.get('種別') : feature.get('Type');
 	var featureStyle = _.clone(featureStyleList[facilityTypeName]);
-	if (favoriteStore.isFavorite(feature)) {
-		featureStyle.color = favoriteColor;
-	}
+
 	var radius = 15;
+	var fillColor = favoriteStore.isFavorite(feature) ? favoriteColor : featureStyle.color;
+	var strokeColor = 'white';
 	var background = new ol.style.Circle({
 		radius: radius,
 		fill: new ol.style.Fill({
-			color: featureStyle.color
+			color: fillColor
 		}),
-		stroke: new ol.style.Stroke({color: 'white', width: 3})
+		stroke: new ol.style.Stroke({color: strokeColor, width: 3})
 	});
 	var image = new ol.style.Icon({
 		anchor: [0.5, 0.5],

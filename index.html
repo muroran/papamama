@@ -77,11 +77,11 @@
             <div id="popup" data-role="popup" data-theme="a" class="ui-content ol-popup" style="max-height: 200px;">
                 <a href="#" id="popup-closer" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
                 <div id="popup-title" data-role="header" data-theme="a"></div>
-                <div id="popup-content" role="main"></div>
                 <div id="popup-nav">
-                  <a id="add-favorite" href="#" class="ui-btn ui-btn-inline ui-icon-star ui-btn-icon-left ui-corner-all">お気に入り登録</a>
-                  <a id="remove-favorite" href="#" class="ui-btn ui-btn-inline ui-icon-star ui-btn-icon-left ui-corner-all">お気に入り削除</a>
+                  <a id="add-favorite" href="#" class="ui-btn ui-icon-star ui-btn-icon-left ui-mini">お気に入り登録する</a>
+                  <a id="remove-favorite" href="#" class="ui-btn ui-icon-star ui-btn-icon-left ui-mini ui-state-active">お気に入り登録中</a>
                 </div>
+                <div id="popup-content" role="main"></div>
             </div>
         </div>
 
@@ -178,14 +178,16 @@
             <a href="#mainPage" data-icon="carat-l" data-iconpos="notext" class="ui-link ui-btn-left ui-btn ui-icon-carat-l ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Back</a>
         	</div><!-- /header -->
 
-        	<div role="main" class="ui-content">
+        	<div role="main">
             <form>
       				<fieldset data-role="controlgroup" class="ui-controlgroup ui-controlgroup-vertical ui-corner-all">
                 <div class="ui-controlgroup-controls" id="favorite-items">
                 </div>
       				</fieldset>
       			</form>
+            <div class="ui-content">
             <a href="#compare-page" class="ui-btn ui-icon-bullets ui-btn-icon-left ui-corner-all ui-btn-b" id="compare-btn">比較する</a>
+            </div>
         	</div><!-- /content -->
         </div>
 

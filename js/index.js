@@ -200,17 +200,23 @@ $('#mainPage').on('pageshow', function() {
 				$addFavoriteBtn.show();
 				$removeFavoriteBtn.hide();
 			}
-			$addFavoriteBtn.off('click').on('click',function(){
+			$addFavoriteBtn.on('click',function(){
 				favoriteStore.addFavorite(feature);
 				papamamap.updateNurseryStyle(feature);
 				$addFavoriteBtn.hide();
 				$removeFavoriteBtn.show();
+
+				$addFavoriteBtn.off('click');
+				$removeFavoriteBtn.off('click');
 			});
-			$removeFavoriteBtn.off('click').on('click',function(){
+			$removeFavoriteBtn.on('click',function(){
 				favoriteStore.removeFavorite(feature);
 				papamamap.updateNurseryStyle(feature);
 				$addFavoriteBtn.show();
 				$removeFavoriteBtn.hide();
+
+				$addFavoriteBtn.off('click');
+				$removeFavoriteBtn.off('click');
 			});
 
 			$('#popup').show();
@@ -556,13 +562,15 @@ var onChangeCheckbox = function() {
 			if (!$checkbox.is(":checked")) {
 				$(this).addClass("ui-state-disabled");
 				$checkbox.prop("disabled", true);
+			} else {
+				$(this).addClass("ui-state-active");
 			}
 		});
 		$("#compare-btn").removeClass("ui-state-disabled");
 		$("#compare-btn").prop("disabled", false);
 	} else {
 		favoriteCheckboxes.each(function(){
-			$(this).removeClass("ui-state-disabled");
+			$(this).removeClass("ui-state-disabled").removeClass("ui-state-active");
 			$(this).find(":checkbox").prop("disabled", false);
 		});
 		$("#compare-btn").addClass("ui-state-disabled");
@@ -650,7 +658,9 @@ $('#compare-page').on('pageshow', function() {
 	var ageE1 = nursery1["AgeE"] || "";
 	var ageS2  = nursery2["AgeS"] || "";
 	var ageE2 = nursery2["AgeE"] || "";
-	content += compareDataDom("年齢", ageS1 + "〜" + ageE1, ageS2 + "〜" + ageE2);
+	var age1 = (ageS1 || ageE1) ? ageS1 + "〜" + ageE1 : null;
+	var age2 = (ageS2 || ageE2) ? ageS2 + "〜" + ageE2 : null;
+	content += compareDataDom("年齢", age1, age2);
 	// 定員
 	content += compareDataDom("定員", nursery1["Full"] ? nursery1["Full"] + '人' : null, nursery2["Full"] ? nursery2["Full"] + '人' : null);
 	// TEL
