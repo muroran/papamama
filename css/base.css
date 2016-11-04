@@ -1,5 +1,5 @@
 /* CSS Document */
-.ui-content {
+#mainPage .ui-content {
 	margin: 0;
 	padding: 0 !important;
 }
@@ -146,4 +146,32 @@ h3 {
 
 legend {
 	margin-bottom: 0;
+}
+
+/* 園比較テーブル */
+table.nursery-compare thead th {
+	background-color: #fff;
+}
+
+table.nursery-compare thead th h3 {
+    font-size: .9em;
+		margin-top: .4em;
+    margin-bottom: .8em;
+}
+
+table.nursery-compare th.item-label {
+	text-transform: uppercase;
+	font-size: 0.6em;
+	opacity: 0.5;
+	padding: 1.2em .8em;
+	background-color: #ddd;
+	white-space: nowrap;
+}
+
+table.nursery-compare tbody tr.nursery-type td {
+	background-color: #fff;
+}
+
+table.nursery-compare tbody td {
+	width: 50%;
 }

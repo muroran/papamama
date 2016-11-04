@@ -571,7 +571,96 @@ var onChangeCheckbox = function() {
 };
 $("#favorite-list").on("change", "#favorite-items .ui-checkbox :checkbox", onChangeCheckbox);
 
-// 比較するボタン押下時
-$("#favorite-list").on("change", "#compare-btn", function() {
+$('#compare-page').on('pageshow', function() {
+	var feature1 = filter.getFeatureById(compareNurseries[0]) || {};
+	var feature2 = filter.getFeatureById(compareNurseries[1]) || {};
+	var nursery1 = feature1.properties || {};
+	var nursery2 = feature2.properties || {};
+	// 名称
+	$("#compare-title-1").text(nursery1["Name"]);
+	$("#compare-title-2").text(nursery2["Name"]);
 
+	var compareDataDom = function(title, data1, data2, trClass) {
+		var dom = "";
+		if (data1 != null || data2 != null) {
+			dom += '<tr ' + (trClass != null ? 'class="' + trClass + '"' : '') + '>';
+			dom += '<th class="item-label">' + (title ? title : '') + '</th>';
+			dom += '<td>' + (data1 ? data1 : '') + '</td>';
+			dom += '<td>' + (data2 ? data2 : '') + '</td>';
+			dom += '</tr>';
+		}
+		return dom;
+	}
+
+	var compareBooleanDataDom = function(title, data1, data2, yValue, nValue, trClass) {
+		var value1 = booleanValue(data1, yValue, nValue);
+		var value2 = booleanValue(data2, yValue, nValue);;
+		return compareDataDom(title, value1, value2, trClass);
+	}
+
+	var booleanValue = function(value, yValue, nValue) {
+		if (value === 'Y') {
+			return yValue || 'はい'
+		}
+		if (value === 'N') {
+			return nValue || 'いいえ'
+		}
+		return null;
+	}
+	var content = '';
+	// 種別
+	content += compareDataDom("種別", nursery1["Type"], nursery2["Type"], "nursery-type");
+	// 時間
+	var open1  = nursery1["Open"] || "";
+	var close1 = nursery1["Close"] || "";
+	var open2  = nursery2["Open"] || "";
+	var close2 = nursery2["Close"] || "";
+	content += compareDataDom("時間", open1 + "〜" + close1, open2 + "〜" + close2);
+	// 備考
+	content += compareDataDom("備考", nursery1["Memo"], nursery2["Memo"]);
+	// 一時保育
+	content += compareBooleanDataDom("一時保育", nursery1["Temp"], nursery2["Temp"], 'あり', 'なし');
+	// 休日保育
+	content += compareBooleanDataDom("休日保育", nursery1["Holiday"], nursery2["Holiday"], 'あり', 'なし');
+	// 夜間保育
+	content += compareBooleanDataDom("夜間保育", nursery1["Night"], nursery2["Night"], 'あり', 'なし');
+	// 24時間
+	content += compareBooleanDataDom("24時間", nursery1["H24"], nursery2["H24"], '対応', '未対応');
+  // 監督基準
+	var proof1 = nursery1["Type"] === "認可外" ? nursery1["Proof"] : null;
+	var proof2 = nursery2["Type"] === "認可外" ? nursery2["Proof"] : null;
+	content += compareBooleanDataDom("監督基準", proof1, proof2, '証明書発行済み', '未発行');
+	// 欠員
+	var vacancy1 = null, vacancy2 = null;
+	if (nursery1["Type"] === "認可保育所") {
+		vacancy1 = booleanValue(nursery1["Vacancy"], '空きあり', '空きなし');
+		if (nursery1["VacancyDate"] != null) {
+				vacancy1 += "<br> (" + nursery1["VacancyDate"] + ")";
+		}
+	}
+	if (nursery2["Type"] === "認可保育所") {
+		vacancy2 = booleanValue(nursery2["Vacancy"], '空きあり', '空きなし');
+		if (nursery2["VacancyDate"] != null) {
+				vacancy2 += "<br> (" + nursery2["VacancyDate"] + ")";
+		}
+	}
+	content += compareDataDom("欠員", vacancy1, vacancy2, '空きあり', '空きなし');
+	// 年齢
+	var ageS1  = nursery1["AgeS"] || "";
+	var ageE1 = nursery1["AgeE"] || "";
+	var ageS2  = nursery2["AgeS"] || "";
+	var ageE2 = nursery2["AgeE"] || "";
+	content += compareDataDom("年齢", ageS1 + "〜" + ageE1, ageS2 + "〜" + ageE2);
+	// 定員
+	content += compareDataDom("定員", nursery1["Full"] ? nursery1["Full"] + '人' : null, nursery2["Full"] ? nursery2["Full"] + '人' : null);
+	// TEL
+	content += compareDataDom("TEL", nursery1["TEL"], nursery2["TEL"]);
+	// 住所
+	var adr1 = (nursery1["Add1"] || "") + (nursery1["Add2"] || "" );
+	var adr2 = (nursery2["Add1"] || "") + (nursery2["Add2"] || "" );
+	content += compareDataDom("住所", adr1, adr2);
+	// 設置者
+	content += compareDataDom("設置者", nursery1["Owner"], nursery2["Owner"]);
+
+	$("#nursery-compare-body").html(content);
 });
