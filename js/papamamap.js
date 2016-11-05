@@ -545,6 +545,13 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<td>' + pool + '</td>';
         content += '</tr>';
     }
+    var remarks = feature.get('Remarks');
+    if (remarks != null) {
+        content += '<tr>';
+        content += '<th>備考</th>';
+        content += '<td>' + remarks + '</td>';
+        content += '</tr>';
+    }
     content += '</tbody></table>';
     return content;
 };
