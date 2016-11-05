@@ -545,6 +545,24 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<td>' + pool + '</td>';
         content += '</tr>';
     }
+
+    var type = feature.get('種別') ? feature.get('種別') : feature.get('Type');
+    var sakidori_auth = booleanValue(feature.get('Sakidori_auth'), 'あり', 'なし');
+    var hoikuroom_auth = booleanValue(feature.get('Hoikuroom_auth'), 'あり', 'なし');
+    if (type === '認可外' && sakidori_auth != null && hoikuroom_auth != null){
+        content += '<tr>';
+        content += '<th>認可外認定</th>';
+        content += '<td>';
+        if(sakidori_auth != null){
+            content += '先取りプロジェクト認定' +  '(' + sakidori_auth + ')';
+        }
+        content += '<br />'
+        if(hoikuroom_auth != null){
+            content += '保育ルーム認定' +  '(' + hoikuroom_auth + ')';
+        }
+        content += '</td>';
+        content += '</tr>';
+    }
     var remarks = feature.get('Remarks');
     if (remarks != null) {
         content += '<tr>';
