@@ -354,6 +354,23 @@ Papamamap.prototype.getPopupContent = function(feature)
 {
     var content = '';
     content = '<table><tbody>';
+    var booleanValue = function(value, yValue, nValue) {
+        if (value === 'Y') {
+            return yValue || 'はい'
+        }
+        if (value === 'N') {
+            return nValue || 'いいえ'
+        }
+        return null;
+    };
+    var booleanValueWithLabel = function(value, label, yValue, nValue) {
+        var a = booleanValue(value, yValue, nValue);
+        if(a === null){
+            return '';
+        }else{
+            return label + ': ' +  a + '<br />';
+        }
+    };
     var open  = feature.get('開園時間') ? feature.get('開園時間') : feature.get('Open');
     var close = feature.get('終園時間') ? feature.get('終園時間') : feature.get('Close');
     if (open !=  null || close != null ) {
@@ -380,18 +397,10 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<tr>';
         content += '<th></th>';
         content += '<td>';
-        if (temp === 'Y') {
-            content += '一時保育 ';
-        }
-        if (holiday === 'Y') {
-            content += '休日保育 ';
-        }
-        if (night === 'Y') {
-            content += '夜間保育 ';
-        }
-        if (h24 === 'Y') {
-            content += '24時間 ';
-        }
+        content += booleanValueWithLabel(temp,'一時保育','あり','なし');
+        content += booleanValueWithLabel(holiday,'休日保育', 'あり','なし');
+        content += booleanValueWithLabel(night,'夜間保育','あり','なし');
+        content += booleanValueWithLabel(h24,'24時間','あり','なし');
         content += '</td>';
         content += '</tr>';
     }
