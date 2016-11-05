@@ -219,7 +219,8 @@ $('#mainPage').on('pageshow', function() {
 				$removeFavoriteBtn.off('click');
 			});
 
-			$('#popup').show();
+			var height = $('#popup').css('max-height', '').height();
+			$('#popup').css('top', - height / 2).show();
 			view = map.getView();
 			view.setCenter(coord);
 		}
