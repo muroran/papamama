@@ -689,6 +689,12 @@ $('#compare-page').on('pageshow', function() {
 	content += compareDataDom("保育室広さ", playroom1, playroom2);
 	// プール
 	content += compareBooleanDataDom("プール", nursery1["Pool"], nursery2["Pool"], 'あり', 'なし');
+	if(nursery1['Type'] === '認可外' && nursery2['Type'] === '認可外') {
+		// 先取りプロジェクト認定
+		content += compareBooleanDataDom("先取りプロジェクト認定", nursery1["Sakidori_auth"], nursery2["Sakidori_auth"], 'あり', 'なし');
+		// 保育ルーム認定
+		content += compareBooleanDataDom("保育ルーム認定", nursery1["Hoikuroom_auth"], nursery2["Hoikuroom_auth"], 'あり', 'なし');
+	}
 	// 備考
 	content += compareDataDom("備考", nursery1["Remarks"], nursery2["Remarks"]);
 
