@@ -675,6 +675,36 @@ $('#compare-page').on('pageshow', function() {
 	content += compareDataDom("住所", adr1, adr2);
 	// 設置者
 	content += compareDataDom("設置者", nursery1["Owner"], nursery2["Owner"]);
+	// 駐車場台数
+	content += compareDataDom("駐車場台数", nursery1["Parking"], nursery2["Parking"]);
+	// 送迎バス
+	content += compareBooleanDataDom("送迎バス", nursery1["Bus"], nursery2["Bus"], 'あり', 'なし');
+	// 制服
+	content += compareBooleanDataDom("制服", nursery1["Uniform"], nursery2["Uniform"], 'あり', 'なし');
+	// スモック
+	content += compareBooleanDataDom("スモック", nursery1["Smock"], nursery2["Smock"], 'あり', 'なし');
+	// 給食
+	content += compareBooleanDataDom("給食", nursery1["Lunch"], nursery2["Lunch"], 'あり', 'なし');
+	// その他経費
+	content += compareDataDom("その他経費", nursery1["Cost"], nursery2["Cost"]);
+	// 申込倍率
+	var competition1 = nursery1["Cost"] ? nursery1["Cost"] + '倍' : null;
+	var competition2 = nursery2["Cost"] ? nursery2["Cost"] + '倍' : null;
+	content += compareDataDom("申込倍率", competition1, competition2);
+	// 建築年月日
+	content += compareDataDom("建築年月日", nursery1["Openingdate"], nursery2["Openingdate"]);
+	// 園庭広さ
+	var playground1 = nursery1["Playground"] ? nursery1["Playground"] + '㎡' : null;
+	var playground2 = nursery2["Playground"] ? nursery2["Playground"] + '㎡' : null;
+	content += compareDataDom("園庭広さ", playground1, playground2);
+	// 保育室広さ
+	var playroom1 = nursery1["Playroom"] ? nursery1["Playroom"] + '㎡' : null;
+	var playroom2 = nursery2["Playroom"] ? nursery2["Playroom"] + '㎡' : null;
+	content += compareDataDom("保育室広さ", playroom1, playroom2);
+	// プール
+	content += compareBooleanDataDom("プール", nursery1["Pool"], nursery2["Pool"], 'あり', 'なし');
+	// 備考
+	content += compareDataDom("備考", nursery1["Remarks"], nursery2["Remarks"]);
 
 	$("#nursery-compare-body").html(content);
 });
