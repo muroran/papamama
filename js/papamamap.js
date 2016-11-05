@@ -398,6 +398,9 @@ Papamamap.prototype.getPopupContent = function(feature)
 
     var type = feature.get('種別') ? feature.get('種別') : feature.get('Type');
     var proof = feature.get('証明') ? feature.get('証明') : feature.get('Proof');
+    // 千葉市版は証明書発行表示必要ないので、proofにnullを設定
+    proof = null;
+
     if(type == "認可外" && proof === 'Y') {
         content += '<tr>';
         content += '<th>監督基準</th>';
