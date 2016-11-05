@@ -218,3 +218,31 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
     newGeoJson.features = features;
     return newGeoJson;
 };
+
+/**
+ * お気に入りの園を返す
+ */
+FacilityFilter.prototype.getFavoriteFeatures = function (nurseryFacilities){
+  var favoriteList = favoriteStore.getFavoriteList();
+  if (nurseryFacilities.features) {
+    return nurseryFacilities.features.filter(function (item,idx) {
+      return favoriteList.indexOf(favoriteStore.getId(item)) >= 0;
+    });
+  } else {
+    return [];
+  }
+}
+
+/**
+ * idに一致した園を返します。
+ */
+FacilityFilter.prototype.getFeatureById = function(id) {
+  var favoriteList = favoriteStore.getFavoriteList();
+  if (nurseryFacilities.features) {
+    return nurseryFacilities.features.find(function (item,idx) {
+      return favoriteStore.getId(item) === id;
+    });
+  } else {
+    return null;
+  }
+}

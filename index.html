@@ -4,10 +4,9 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>千葉市保育園マップ by Code for Chiba</title>
-        <link rel="stylesheet" href="css/ol.css" type="text/css">
-        <link rel="stylesheet" href="css/bootstrap.css" type="text/css">
-        <link rel="stylesheet" href="css/bootstrap.css.map" type="text/css">
-        <link rel="stylesheet" href="css/jquery.mobile-1.4.4.css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/ol3/3.1.0/ol.min.css" type="text/css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css" type="text/css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.4/jquery.mobile.min.css">
         <link rel="stylesheet" href="css/base.css" type="text/css">
         <link rel="stylesheet" href="css/icon-pack-custom.css">
         <script>
@@ -66,20 +65,26 @@
                         </optgroup>
                     </select>
 
+                    <a id="btnFavorite" href="#favorite-list" class="ui-btn ui-corner-all ui-btn-a ui-btn-icon-right ui-icon-star">お気に入り</a>
+
                     <a id="btnHelp" href="http://www.codeforsapporo.org/papamama/" target="_blank" class="ui-btn ui-icon-question ui-btn-icon-notext">help</a>
                     <!--
                     <a id="btnHelp" href="#helpDialog" data-rel="popup" data-position-to="window" class="ui-btn ui-icon-question ui-btn-icon-notext">help</a>
                     -->
                 </fieldset>
             </div>
-            <div id="map" class="map">
-            </div>
-            <div id="popup" data-role="popup" data-theme="a" class="ui-content ol-popup" style="max-height: 200px;">
+            <div id="map" class="map"></div>
+            <div id="popup" data-role="popup" data-theme="a" class="ol-popup" style="max-height: 200px;">
                 <a href="#" id="popup-closer" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
                 <div id="popup-title" data-role="header" data-theme="a"></div>
+                <div id="popup-nav">
+                  <a id="add-favorite" href="#" class="ui-btn ui-icon-star ui-btn-icon-left ui-mini">お気に入り登録する</a>
+                  <a id="remove-favorite" href="#" class="ui-btn ui-icon-star ui-btn-icon-left ui-mini ui-state-active">お気に入り登録中</a>
+                </div>
                 <div id="popup-content" role="main"></div>
             </div>
         </div>
+
         <div data-role="popup" data-history="false" id="filterdialog" data-theme="a" class="ui-corner-all ui-icon-delete ui-btn-left">
             <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
             <form>
@@ -137,10 +142,6 @@
                         <input type="checkbox" id="ninkagai24H" class="filtercb">
                     </fieldset>
                     <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-                    <label for="ninkagaiShomei">証明書あり</label>
-                    <input type="checkbox" id="ninkagaiShomei" class="filtercb">
-                    </fieldset>
-                    <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                         <a href="#" data-rel="back" id="filterApply" class="ui-btn ui-corner-all ui-btn-a ui-btn-icon-left ui-icon-check">条件適用</a>
                         <a href="#" id="filterReset" class="ui-btn ui-corner-all ui-btn-a ui-btn-icon-left ui-icon-delete">リセット</a>
                     </fieldset>
@@ -165,15 +166,63 @@
                 </fieldset>
             </div>
         </div>
-        <script src="js/jquery-2.1.1.min.js" type="text/javascript"></script>
-        <script src="js/jquery.mobile-1.4.4.min.js" type="text/javascript"></script>
-        <script src="js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="js/v3.0.0/build/ol.js" type="text/javascript"></script>
+</div>
+        <div data-role="page" id="favorite-list" >
+
+        	<div data-role="header" role="banner" class="ui-header ui-bar-inherit">
+        		<h1 class="ui-title" role="heading" aria-level="1">お気に入り一覧</h1>
+            <a href="#mainPage" data-icon="carat-l" data-iconpos="notext" class="ui-link ui-btn-left ui-btn ui-icon-carat-l ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Back</a>
+        	</div><!-- /header -->
+
+        	<div role="main">
+            <form>
+      				<fieldset data-role="controlgroup" class="ui-controlgroup ui-controlgroup-vertical ui-corner-all">
+                <div class="ui-controlgroup-controls" id="favorite-items">
+                </div>
+      				</fieldset>
+      			</form>
+            <div class="ui-content">
+            <a href="#compare-page" class="ui-btn ui-icon-bullets ui-btn-icon-left ui-corner-all ui-btn-b" id="compare-btn">比較する</a>
+            </div>
+        	</div><!-- /content -->
+        </div>
+
+        <div data-role="page" id="compare-page" >
+          <div data-role="header" role="banner" class="ui-header ui-bar-inherit">
+        		<h1 class="ui-title" role="heading" aria-level="1">比較</h1>
+            <a href="#favorite-list" data-icon="carat-l" data-iconpos="notext" class="ui-link ui-btn-left ui-btn ui-icon-carat-l ui-btn-icon-notext ui-shadow ui-corner-all" data-role="button" role="button">Back</a>
+        	</div><!-- /header -->
+
+          <div role="main">
+            <table id="phone-table" class="nursery-compare ui-shadow table-stroke ui-table ui-table-columntoggle">
+              <thead>
+                <tr>
+                  <th class="item-label">名称</th>
+                  <th>
+                    <h3 id="compare-title-1"></h3>
+          				</th>
+          				<th>
+                    <h3 id="compare-title-2"></h3>
+          				</th>
+                </tr>
+              </thead>
+              <tbody id="nursery-compare-body">
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.4.4/jquery.mobile.min.js" type="text/javascript"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/ol3/3.1.0/ol.min.js" type="text/javascript"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
         <script src="js/ol_style.js" type="text/javascript"></script>
         <script src="js/movecurrentlocationcontrol.js" type="text/javascript"></script>
         <script src="js/movetolist.js" type="text/javascript"></script>
         <script src="js/facilityfilter.js" type="text/javascript"></script>
         <script src="js/papamamap.js" type="text/javascript"></script>
+        <script src="js/favoriteStore.js" type="text/javascript"></script>
         <script src="js/index.js" type="text/javascript"></script>
         <div id="marker"></div>
         <div id="markerTitle"></div>

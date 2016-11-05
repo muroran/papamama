@@ -8,6 +8,7 @@ window.Papamamap = function() {
     this.map = null;
     this.centerLatOffsetPixel = 75;
     this.viewCenter = [];
+    this.featureOverlays = {};
 };
 
 /**
@@ -157,38 +158,49 @@ Papamamap.prototype.addNurseryFacilitiesLayer = function(facilitiesData)
     }
 
     // 幼稚園
-    this.map.addLayer(
-        new ol.layer.Vector({
-            source: new ol.source.GeoJSON({
-                projection: 'EPSG:3857',
-                object: facilitiesData
-            }),
-            name: 'layerKindergarten',
-            style: kindergartenStyleFunction
-        })
-    );
+    var layerKindergarten = new ol.layer.Vector({
+        source: new ol.source.GeoJSON({
+            projection: 'EPSG:3857',
+            object: {
+              type: facilitiesData.type,
+              features: _.filter(facilitiesData.features, function(data) {return data.properties['Type'] === '幼稚園'})
+            }
+        }),
+        name: 'layerKindergarten',
+        style: nurseryStyleFunction
+    });
+    this.map.addLayer(layerKindergarten);
+    this.featureOverlays["幼稚園"] = layerKindergarten;
+
     // 認可外
-    this.map.addLayer(
-        new ol.layer.Vector({
-            source: new ol.source.GeoJSON({
-                projection: 'EPSG:3857',
-                object: facilitiesData
-            }),
-            name: 'layerNinkagai',
-            style: ninkagaiStyleFunction
-        })
-    );
+    var layerNinkagai = new ol.layer.Vector({
+        source: new ol.source.GeoJSON({
+            projection: 'EPSG:3857',
+            object: {
+              type: facilitiesData.type,
+              features: _.filter(facilitiesData.features, function(data) {return data.properties['Type'] === '認可外'})
+            }
+        }),
+        name: 'layerNinkagai',
+        style: nurseryStyleFunction
+    });
+    this.map.addLayer(layerNinkagai);
+    this.featureOverlays["認可外"] = layerNinkagai;
+
     // 認可
-    this.map.addLayer(
-        new ol.layer.Vector({
-            source: new ol.source.GeoJSON({
-                projection: 'EPSG:3857',
-                object: facilitiesData
-            }),
-            name: 'layerNinka',
-            style: ninkaStyleFunction
-        })
-    );
+    var layerNinka = new ol.layer.Vector({
+        source: new ol.source.GeoJSON({
+            projection: 'EPSG:3857',
+            object: {
+              type: facilitiesData.type,
+              features: _.filter(facilitiesData.features, function(data) {return data.properties['Type'] === '認可保育所'})
+            }
+        }),
+        name: 'layerNinka',
+        style: nurseryStyleFunction
+    });
+    this.map.addLayer(layerNinka);
+    this.featureOverlays["認可保育所"] = layerNinka;
 };
 
 /**
@@ -342,6 +354,23 @@ Papamamap.prototype.getPopupContent = function(feature)
 {
     var content = '';
     content = '<table><tbody>';
+    var booleanValue = function(value, yValue, nValue) {
+        if (value === 'Y') {
+            return yValue || 'はい'
+        }
+        if (value === 'N') {
+            return nValue || 'いいえ'
+        }
+        return null;
+    };
+    var booleanValueWithLabel = function(value, label, yValue, nValue) {
+        var a = booleanValue(value, yValue, nValue);
+        if(a === null){
+            return '';
+        }else{
+            return label + ': ' +  a + '<br />';
+        }
+    };
     var open  = feature.get('開園時間') ? feature.get('開園時間') : feature.get('Open');
     var close = feature.get('終園時間') ? feature.get('終園時間') : feature.get('Close');
     if (open !=  null || close != null ) {
@@ -368,24 +397,19 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<tr>';
         content += '<th></th>';
         content += '<td>';
-        if (temp === 'Y') {
-            content += '一時保育 ';
-        }
-        if (holiday === 'Y') {
-            content += '休日保育 ';
-        }
-        if (night === 'Y') {
-            content += '夜間保育 ';
-        }
-        if (h24 === 'Y') {
-            content += '24時間 ';
-        }
+        content += booleanValueWithLabel(temp,'一時保育','あり','なし');
+        content += booleanValueWithLabel(holiday,'休日保育', 'あり','なし');
+        content += booleanValueWithLabel(night,'夜間保育','あり','なし');
+        content += booleanValueWithLabel(h24,'24時間','あり','なし');
         content += '</td>';
         content += '</tr>';
     }
 
     var type = feature.get('種別') ? feature.get('種別') : feature.get('Type');
     var proof = feature.get('証明') ? feature.get('証明') : feature.get('Proof');
+    // 千葉市版は証明書発行表示必要ないので、proofにnullを設定
+    proof = null;
+
     if(type == "認可外" && proof === 'Y') {
         content += '<tr>';
         content += '<th>監督基準</th>';
@@ -442,6 +466,90 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<tr>';
         content += '<th>設置者</th>';
         content += '<td>' + owner + '</td>';
+        content += '</tr>';
+    }
+    var parking = feature.get('Parking');
+    if (parking != null) {
+        content += '<tr>';
+        content += '<th>駐車場台数</th>';
+        content += '<td>' + parking + '</td>';
+        content += '</tr>';
+    }
+    var bus = booleanValue(feature.get('Bus'), 'あり', 'なし');
+    if (bus != null) {
+        content += '<tr>';
+        content += '<th>送迎バス</th>';
+        content += '<td>' + bus + '</td>';
+        content += '</tr>';
+    }
+    var uniform = booleanValue(feature.get('Uniform'), 'あり', 'なし');
+    if (uniform != null) {
+        content += '<tr>';
+        content += '<th>制服</th>';
+        content += '<td>' + uniform + '</td>';
+        content += '</tr>';
+    }
+    var smock = booleanValue(feature.get('Smock'), 'あり', 'なし');
+    if (smock != null) {
+        content += '<tr>';
+        content += '<th>スモック</th>';
+        content += '<td>' + smock + '</td>';
+        content += '</tr>';
+    }
+    var lunch = booleanValue(feature.get('Lunch'), 'あり', 'なし');
+    if (lunch != null) {
+        content += '<tr>';
+        content += '<th>給食</th>';
+        content += '<td>' + lunch + '</td>';
+        content += '</tr>';
+    }
+    var cost = feature.get('Cost');
+    if (cost != null) {
+        content += '<tr>';
+        content += '<th>その他経費</th>';
+        content += '<td>' + cost + '</td>';
+        content += '</tr>';
+    }
+    var competition = feature.get('Competition');
+    if (competition != null) {
+        content += '<tr>';
+        content += '<th>申込倍率</th>';
+        content += '<td>' + competition + '倍</td>';
+        content += '</tr>';
+    }
+    var openingdate = feature.get('Openingdate');
+    if (openingdate != null) {
+        content += '<tr>';
+        content += '<th>建築年月日</th>';
+        content += '<td>' + openingdate + '</td>';
+        content += '</tr>';
+    }
+    var playground = feature.get('Playground');
+    if (playground != null) {
+        content += '<tr>';
+        content += '<th>園庭広さ</th>';
+        content += '<td>' + playground + '㎡</td>';
+        content += '</tr>';
+    }
+    var playroom = feature.get('Playroom');
+    if (playroom != null) {
+        content += '<tr>';
+        content += '<th>保育室広さ</th>';
+        content += '<td>' + playroom + '㎡</td>';
+        content += '</tr>';
+    }
+    var pool = booleanValue(feature.get('Pool'), 'あり', 'なし');
+    if (pool != null) {
+        content += '<tr>';
+        content += '<th>プール</th>';
+        content += '<td>' + pool + '</td>';
+        content += '</tr>';
+    }
+    var remarks = feature.get('Remarks');
+    if (remarks != null) {
+        content += '<tr>';
+        content += '<th>備考</th>';
+        content += '<td>' + remarks + '</td>';
         content += '</tr>';
     }
     content += '</tbody></table>';
@@ -554,3 +662,23 @@ Papamamap.prototype.switchLayer = function(layerName, visible) {
         }
     });
 };
+
+Papamamap.prototype.updateNurseryStyle = function(feature) {
+  var type = feature.get('種別') ? feature.get('種別') :  feature.get('Type');
+  if(type === undefined) {
+    return;
+  }
+  var overlay = this.featureOverlays[type];
+  var id = favoriteStore.getId(feature);
+
+  var features = overlay.getSource().getFeatures();
+  if (features != null && features.length > 0) {
+    for (x in features) {
+      if (id === favoriteStore.getId(features[x])) {
+        overlay.getSource().removeFeature(features[x]);
+        overlay.getSource().addFeature(features[x]);
+        break;
+      }
+    }
+  }
+}
