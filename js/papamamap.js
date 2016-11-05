@@ -468,6 +468,90 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<td>' + owner + '</td>';
         content += '</tr>';
     }
+    var parking = feature.get('Parking');
+    if (parking != null) {
+        content += '<tr>';
+        content += '<th>駐車場台数</th>';
+        content += '<td>' + parking + '</td>';
+        content += '</tr>';
+    }
+    var bus = booleanValue(feature.get('Bus'), 'あり', 'なし');
+    if (bus != null) {
+        content += '<tr>';
+        content += '<th>送迎バス</th>';
+        content += '<td>' + bus + '</td>';
+        content += '</tr>';
+    }
+    var uniform = booleanValue(feature.get('Uniform'), 'あり', 'なし');
+    if (uniform != null) {
+        content += '<tr>';
+        content += '<th>制服</th>';
+        content += '<td>' + uniform + '</td>';
+        content += '</tr>';
+    }
+    var smock = booleanValue(feature.get('Smock'), 'あり', 'なし');
+    if (smock != null) {
+        content += '<tr>';
+        content += '<th>スモック</th>';
+        content += '<td>' + smock + '</td>';
+        content += '</tr>';
+    }
+    var lunch = booleanValue(feature.get('Lunch'), 'あり', 'なし');
+    if (lunch != null) {
+        content += '<tr>';
+        content += '<th>給食</th>';
+        content += '<td>' + lunch + '</td>';
+        content += '</tr>';
+    }
+    var cost = feature.get('Cost');
+    if (cost != null) {
+        content += '<tr>';
+        content += '<th>その他経費</th>';
+        content += '<td>' + cost + '</td>';
+        content += '</tr>';
+    }
+    var competition = feature.get('Competition');
+    if (competition != null) {
+        content += '<tr>';
+        content += '<th>申込倍率</th>';
+        content += '<td>' + competition + '倍</td>';
+        content += '</tr>';
+    }
+    var openingdate = feature.get('Openingdate');
+    if (openingdate != null) {
+        content += '<tr>';
+        content += '<th>建築年月日</th>';
+        content += '<td>' + openingdate + '</td>';
+        content += '</tr>';
+    }
+    var playground = feature.get('Playground');
+    if (playground != null) {
+        content += '<tr>';
+        content += '<th>園庭広さ</th>';
+        content += '<td>' + playground + '㎡</td>';
+        content += '</tr>';
+    }
+    var playroom = feature.get('Playroom');
+    if (playroom != null) {
+        content += '<tr>';
+        content += '<th>保育室広さ</th>';
+        content += '<td>' + playroom + '㎡</td>';
+        content += '</tr>';
+    }
+    var pool = booleanValue(feature.get('Pool'), 'あり', 'なし');
+    if (pool != null) {
+        content += '<tr>';
+        content += '<th>プール</th>';
+        content += '<td>' + pool + '</td>';
+        content += '</tr>';
+    }
+    var remarks = feature.get('Remarks');
+    if (remarks != null) {
+        content += '<tr>';
+        content += '<th>備考</th>';
+        content += '<td>' + remarks + '</td>';
+        content += '</tr>';
+    }
     content += '</tbody></table>';
     return content;
 };
