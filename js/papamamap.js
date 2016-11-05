@@ -352,16 +352,6 @@ Papamamap.prototype.getPopupTitle = function(feature)
  */
 Papamamap.prototype.getPopupContent = function(feature)
 {
-    var booleanValue = function(value, yValue, nValue) {
-      if (value === 'Y') {
-        return yValue;
-      }
-      if (value === 'N') {
-        return nValue;
-      }
-      return null;
-    }
-
     var content = '';
     content = '<table><tbody>';
     var open  = feature.get('開園時間') ? feature.get('開園時間') : feature.get('Open');
