@@ -363,14 +363,7 @@ Papamamap.prototype.getPopupContent = function(feature)
         }
         return null;
     };
-    var booleanValueWithLabel = function(value, label, yValue, nValue) {
-        var a = booleanValue(value, yValue, nValue);
-        if(a === null){
-            return '';
-        }else{
-            return label + ': ' +  a + '<br />';
-        }
-    };
+
     var open  = feature.get('開園時間') ? feature.get('開園時間') : feature.get('Open');
     var close = feature.get('終園時間') ? feature.get('終園時間') : feature.get('Close');
     if (open !=  null || close != null ) {
@@ -388,20 +381,33 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<td>' + memo + '</td>';
         content += '</tr>';
     }
+
     var temp    = feature.get('一時') ? feature.get('一時') : feature.get('Temp');
     var holiday = feature.get('休日') ? feature.get('休日') : feature.get('Holiday');
     var night   = feature.get('夜間') ? feature.get('夜間') : feature.get('Night');
     var h24     = feature.get('H24') ? feature.get('H24') : feature.get('H24');
-
-    if( temp === 'Y' || holiday === 'Y' || night === 'Y' || h24 === 'Y') {
+    if (temp != null) {
         content += '<tr>';
-        content += '<th></th>';
-        content += '<td>';
-        content += booleanValueWithLabel(temp,'一時保育','あり','なし');
-        content += booleanValueWithLabel(holiday,'休日保育', 'あり','なし');
-        content += booleanValueWithLabel(night,'夜間保育','あり','なし');
-        content += booleanValueWithLabel(h24,'24時間','あり','なし');
-        content += '</td>';
+        content += '<th>一時保育</th>';
+        content += '<td>' + booleanValue(temp, 'あり', 'なし') + '</td>';
+        content += '</tr>';
+    }
+    if (holiday != null) {
+        content += '<tr>';
+        content += '<th>休日保育</th>';
+        content += '<td>' + booleanValue(holiday, 'あり', 'なし') + '</td>';
+        content += '</tr>';
+    }
+    if (night != null) {
+        content += '<tr>';
+        content += '<th>夜間保育</th>';
+        content += '<td>' + booleanValue(night, 'あり', 'なし') + '</td>';
+        content += '</tr>';
+    }
+    if (h24 != null) {
+        content += '<tr>';
+        content += '<th>24時間</th>';
+        content += '<td>' + booleanValue(h24, 'あり', 'なし') + '</td>';
         content += '</tr>';
     }
 
@@ -418,12 +424,17 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '</td>';
         content += '</tr>';
     }
+
     var vacancy = feature.get('Vacancy');
-    if(type == "認可保育所" && vacancy === 'Y') {
+    if(type == "認可保育所" && vacancy != null) {
         content += '<tr>';
         content += '<th>欠員</th>';
         content += '<td>';
-        content += '<a href="http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html" target="_blank">空きあり</a>';
+        if(vacancy === 'Y') {
+            content += '<a href="http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html" target="_blank">空きあり</a>';
+        }else if (vacancy === 'N'){
+            content += '<a href="http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html" target="_blank">空きなし</a>';
+        }
         var vacancyDate = feature.get('VacancyDate');
         if (vacancyDate != null) {
             content += " (" + vacancyDate + ")";
@@ -431,6 +442,7 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '</td>';
         content += '</tr>';
     }
+
     var ageS = feature.get('開始年齢') ? feature.get('開始年齢') : feature.get('AgeS');
     var ageE = feature.get('終了年齢') ? feature.get('終了年齢') : feature.get('AgeE');
     if (ageS != null || ageE != null) {
