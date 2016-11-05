@@ -637,6 +637,9 @@ $('#compare-page').on('pageshow', function() {
   // 監督基準
 	var proof1 = nursery1["Type"] === "認可外" ? nursery1["Proof"] : null;
 	var proof2 = nursery2["Type"] === "認可外" ? nursery2["Proof"] : null;
+	// 千葉市版は証明書発行表示必要ないので、proof1,2にnullを設定
+	proof1 = null;
+	proof2 = null;
 	content += compareBooleanDataDom("監督基準", proof1, proof2, '証明書発行済み', '未発行');
 	// 欠員
 	var vacancy1 = null, vacancy2 = null;
