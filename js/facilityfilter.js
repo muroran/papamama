@@ -127,6 +127,26 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
         };
         hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
     }
+    // 先取りプロジェクト認定あり
+    if(conditions['Sakidori_auth']) {
+        filterfunc = function (item,idx) {
+            var proof = item.properties['Sakidori_auth'];
+            if(proof === 'Y') {
+                return true;
+            }
+        };
+        ninkagaiFeatures = ninkagaiFeatures.filter(filterfunc);
+    }
+    // 保育ルーム認定あり
+    if(conditions['Hoikuroom_auth']) {
+        filterfunc = function (item,idx) {
+            var proof = item.properties['Hoikuroom_auth'];
+            if(proof === 'Y') {
+                return true;
+            }
+        };
+        ninkagaiFeatures = ninkagaiFeatures.filter(filterfunc);
+    }
     // console.log("[after]ninkagaiFeatures length:", ninkagaiFeatures.length);
 
     // ----------------------------------------------------------------------

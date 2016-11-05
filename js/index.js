@@ -372,6 +372,16 @@ $('#mainPage').on('pageshow', function() {
 			conditions['24H'] = 1;
 			ninka = ninkagai = true;
 		}
+		// 先取りプロジェクト認定
+		if($('#Sakidori_auth').prop('checked')) {
+			conditions['Sakidori_auth'] = 1;
+			ninkagai = true;
+		}
+		// 保育ルーム認定
+		if($('#Hoikuroom_auth').prop('checked')) {
+			conditions['Hoikuroom_auth'] = 1;
+			ninkagai = true;
+		}
 
 		// 幼稚園
 
