@@ -343,48 +343,34 @@ $('#mainPage').on('pageshow', function() {
 		conditions = [];
 		ninka = ninkagai = kindergarten = false;
 
-		// 認可保育園
-		if($('#ninkaOpenTime option:selected').val() !== "") {
-			conditions['ninkaOpenTime'] = $('#ninkaOpenTime option:selected').val();
-			ninka = true;
+		// 保育園
+		if($('#OpenTime option:selected').val() !== "") {
+			conditions['OpenTime'] = $('#OpenTime option:selected').val();
+			ninka = ninkagai = true;
 		}
-		if($('#ninkaCloseTime option:selected').val() !== "") {
-			conditions['ninkaCloseTime'] = $('#ninkaCloseTime option:selected').val();
-			ninka = true;
+		if($('#CloseTime option:selected').val() !== "") {
+			conditions['CloseTime'] = $('#CloseTime option:selected').val();
+			ninka = ninkagai = true;
 		}
-		if($('#ninkaIchijiHoiku').prop('checked')) {
-			conditions['ninkaIchijiHoiku'] = 1;
-			ninka = true;
+		if($('#IchijiHoiku').prop('checked')) {
+			conditions['IchijiHoiku'] = 1;
+			ninka = ninkagai = true;
 		}
-		if($('#ninkaYakan').prop('checked')) {
-			conditions['ninkaYakan'] = 1;
-			ninka = true;
+		if($('#Yakan').prop('checked')) {
+			conditions['Yakan'] = 1;
+			ninka = ninkagai = true;
 		}
-		if($('#ninkaKyujitu').prop('checked')) {
-			conditions['ninkaKyujitu'] = 1;
-			ninka = true;
+		if($('#Kyujitu').prop('checked')) {
+			conditions['Kyujitu'] = 1;
+			ninka = ninkagai = true;
 		}
-		if($('#ninkaVacancy').prop('checked')) {
-			conditions['ninkaVacancy'] = 1;
-			ninka = true;
+		if($('#Vacancy').prop('checked')) {
+			conditions['Vacancy'] = 1;
+			ninka = ninkagai = true;
 		}
-
-		// 認可外
-		if($('#ninkagaiOpenTime option:selected').val() !== "") {
-			conditions['ninkagaiOpenTime'] = $('#ninkagaiOpenTime option:selected').val();
-			ninkagai = true;
-		}
-		if($('#ninkagaiCloseTime option:selected').val() !== "") {
-			conditions['ninkagaiCloseTime'] = $('#ninkagaiCloseTime option:selected').val();
-			ninkagai = true;
-		}
-		if($('#ninkagai24H').prop('checked')) {
-			conditions['ninkagai24H'] = 1;
-			ninkagai = true;
-		}
-		if($('#ninkagaiShomei').prop('checked')) {
-			conditions['ninkagaiShomei'] = 1;
-			ninkagai = true;
+		if($('#24H').prop('checked')) {
+			conditions['24H'] = 1;
+			ninka = ninkagai = true;
 		}
 
 		// 幼稚園
