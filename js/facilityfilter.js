@@ -135,7 +135,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
                 return true;
             }
         };
-        ninkagaiFeatures = ninkagaiFeatures.filter(filterfunc);
+        hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
     }
     // 保育ルーム認定あり
     if(conditions['Hoikuroom_auth']) {
@@ -145,7 +145,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
                 return true;
             }
         };
-        ninkagaiFeatures = ninkagaiFeatures.filter(filterfunc);
+        hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
     }
     // console.log("[after]ninkagaiFeatures length:", ninkagaiFeatures.length);
 
