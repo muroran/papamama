@@ -563,7 +563,16 @@ var onChangeCheckbox = function() {
 	  return $(this).val();
 	}).get();
 
-	if (compareNurseries.length >= 2) {
+    if (compareNurseries.length == 1) {
+		favoriteCheckboxes.each(function(){
+			$(this).removeClass("ui-state-disabled").removeClass("ui-state-active");
+			$(this).find(":checkbox").prop("disabled", false);
+		});
+		$("#compare-btn").addClass("ui-state-disabled");
+		$("#compare-btn").prop("disabled", true);
+		$("#delete-btn").removeClass("ui-state-disabled");
+		$("#delete-btn").prop("disabled", false);
+    } else if (compareNurseries.length >= 2) {
 		favoriteCheckboxes.each(function(){
 			var $checkbox = $(this).find(":checkbox");
 			if (!$checkbox.is(":checked")) {
@@ -580,8 +589,8 @@ var onChangeCheckbox = function() {
 			$(this).removeClass("ui-state-disabled").removeClass("ui-state-active");
 			$(this).find(":checkbox").prop("disabled", false);
 		});
-		$("#compare-btn").addClass("ui-state-disabled");
-		$("#compare-btn").prop("disabled", true);
+		$("#compare-btn, #delete-btn").addClass("ui-state-disabled");
+		$("#compare-btn, #delete-btn").prop("disabled", true);
 	}
 };
 $("#favorite-list").on("change", "#favorite-items .ui-checkbox :checkbox", onChangeCheckbox);
@@ -726,4 +735,17 @@ $('#compare-page').on('pageshow', function() {
 	content += compareDataDom("備考", nursery1["Remarks"], nursery2["Remarks"]);
 
 	$("#nursery-compare-body").html(content);
+});
+
+// お気に入りから外す
+$('#delete-btn').on('tap', function() {
+	var favoriteList = filter.getFavoriteFeatures(nurseryFacilities);
+	// チェックされた施設をお気に入りからremove
+	for(var i=0; i<favoriteList.length ; i++) {
+		if (compareNurseries[i] != null ) {
+			favoriteStore.removeFavorite(filter.getFeatureById(compareNurseries[i]));
+		}
+	}
+	// お気に入り一覧画面に反映するためreload
+	location.reload();
 });
