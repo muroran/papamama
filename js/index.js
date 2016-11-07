@@ -531,29 +531,8 @@ $('#mainPage').on('pageshow', function() {
  */
 // 表示処理
 $('#favorite-list').on('pageshow', function() {
-	var favoriteList = filter.getFavoriteFeatures(nurseryFacilities);
-	var $items = $("#favorite-items");
-	$items.children().remove();
-	favoriteList.forEach(function(item, index){
-		var id = favoriteStore.getId(item);
-		var styleClass = "ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-on";
-		if (index === 0) {
-			styleClass += " ui-first-child";
-		}
-		if (index === favoriteList.length - 1) {
-			styleClass += " ui-last-child";
-		}
-		var element = "";
-		element += "<div class='ui-checkbox'>";
-		element += "  <label for='" + id + "' class='" + styleClass + "'>" + item.properties['Name'] + "</label>";
-		element += "  <input type='checkbox' value='" + id + "' id='" + id + "' " + (compareNurseries.indexOf(id) >= 0 ? "checked='checked'" : "") + ">";
-		element += "</div>"
-
-		$items.append(element);
-	});
-	$items.trigger('create');
-
-	onChangeCheckbox();
+	// お気に入り一覧作成
+	createFavoriteList();
 });
 
 // チェックボックス選択時
@@ -746,6 +725,33 @@ $('#delete-btn').on('tap', function() {
 			favoriteStore.removeFavorite(filter.getFeatureById(compareNurseries[i]));
 		}
 	}
-	// お気に入り一覧画面に反映するためreload
-	location.reload();
+	// お気に入り一覧再構築
+	createFavoriteList();
 });
+
+// お気に入り一覧作成
+function createFavoriteList() {
+	var favoriteList = filter.getFavoriteFeatures(nurseryFacilities);
+	var $items = $("#favorite-items");
+	$items.children().remove();
+	favoriteList.forEach(function(item, index){
+		var id = favoriteStore.getId(item);
+		var styleClass = "ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-on";
+		if (index === 0) {
+			styleClass += " ui-first-child";
+		}
+		if (index === favoriteList.length - 1) {
+			styleClass += " ui-last-child";
+		}
+		var element = "";
+		element += "<div class='ui-checkbox'>";
+		element += "  <label for='" + id + "' class='" + styleClass + "'>" + item.properties['Name'] + "</label>";
+		element += "  <input type='checkbox' value='" + id + "' id='" + id + "' " + (compareNurseries.indexOf(id) >= 0 ? "checked='checked'" : "") + ">";
+		element += "</div>"
+
+		$items.append(element);
+	});
+	$items.trigger('create');
+
+	onChangeCheckbox();
+}
