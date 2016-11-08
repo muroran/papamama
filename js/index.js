@@ -382,6 +382,16 @@ $('#mainPage').on('pageshow', function() {
 			conditions['Hoikuroom_auth'] = 1;
 			ninkagai = true;
 		}
+		// こども園
+		if($('#Kodomo').prop('checked')) {
+			conditions['Kodomo'] = 1;
+			ninka = ninkagai = kindergarten = true;
+		}
+		// 事業所内保育所
+		if($('#Shanai').prop('checked')) {
+			conditions['Shanai'] = 1;
+			ninka = ninkagai = true;
+		}
 
 		// 幼稚園
 
@@ -615,6 +625,13 @@ $('#compare-page').on('pageshow', function() {
 	var content = '';
 	// 種別
 	content += compareDataDom("種別", nursery1["Type"], nursery2["Type"], "nursery-type");
+	// 施設種別
+	var kodomo1  = nursery1["Kodomo"] === 'Y' ? '認定こども園' : "";
+	var shanai1 = nursery1["Shanai"] === 'Y' ? '事業所内保育所' : "";
+	var kodomo2  = nursery2["Kodomo"] === 'Y' ? '認定こども園' : "";
+	var shanai2 = nursery2["Shanai"] === 'Y' ? '事業所内保育所' : "";
+	content += compareDataDom("施設種別", kodomo1+shanai1 || null, kodomo2+shanai2 || null, "nursery-type");
+
 	// 時間
 	var open1  = nursery1["Open"] || "";
 	var close1 = nursery1["Close"] || "";

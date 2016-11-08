@@ -364,6 +364,18 @@ Papamamap.prototype.getPopupContent = function(feature)
         return null;
     };
 
+    var kodomo = feature.get('Kodomo');
+    var shanai = feature.get('Shanai');
+    if (kodomo === 'Y' || shanai === 'Y') {
+        content += '<tr>';
+        content += '<th>施設種別</th>';
+        content += '<td>';
+        content += kodomo === 'Y' ? '認定こども園 ' : '';
+        content += shanai === 'Y' ? '事業所内保育所 ' : '';
+        content += '</td>';
+        content += '</tr>';
+    }
+
     var open  = feature.get('開園時間') ? feature.get('開園時間') : feature.get('Open');
     var close = feature.get('終園時間') ? feature.get('終園時間') : feature.get('Close');
     if (open !=  null || close != null ) {

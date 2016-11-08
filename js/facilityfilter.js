@@ -147,6 +147,27 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
         };
         hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
     }
+    // 事業所内保育所
+    if(conditions['Shanai']) {
+        filterfunc = function (item,idx) {
+            var shanai = item.properties['Shanai'];
+            if(shanai === 'Y') {
+                return true;
+            }
+        };
+        hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
+    }
+    // こども園
+    if(conditions['Kodomo']) {
+        filterfunc = function (item,idx) {
+            var kodomo = item.properties['Kodomo'];
+            if(kodomo === 'Y') {
+                return true;
+            }
+        };
+        hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
+        youchienFeatures = youchienFeatures.filter(filterfunc);
+    }
     // console.log("[after]ninkagaiFeatures length:", ninkagaiFeatures.length);
 
     // ----------------------------------------------------------------------
