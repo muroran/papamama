@@ -128,13 +128,23 @@
                         <input type="checkbox" id="Hoikuroom_auth" class="filtercb">
                     </fieldset>
                     <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
+                        <label for="Kodomo">こども園</label>
+                        <input type="checkbox" id="Kodomo" class="filtercb">
+                        <label for="Shanai">事業所内保育所</label>
+                        <input type="checkbox" id="Shanai" class="filtercb">
+                    </fieldset>
+                    <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
                         <label for="Vacancy">空きあり（試用版。最新の空き状況ではありません）</label>
                         <input type="checkbox" id="Vacancy" class="filtercb">
                     </fieldset>
-                    <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-                        <a href="#" data-rel="back" id="filterApply" class="ui-btn ui-corner-all ui-btn-a ui-btn-icon-left ui-icon-check">条件適用</a>
-                        <a href="#" id="filterReset" class="ui-btn ui-corner-all ui-btn-a ui-btn-icon-left ui-icon-delete">リセット</a>
-                    </fieldset>
+                    <div class="ui-grid-a">
+                      <div class="ui-block-a">
+                          <a href="#" data-rel="back" id="filterApply" class="ui-btn ui-corner-all ui-btn-b ui-btn-icon-left ui-icon-check">条件適用</a>
+                      </div>
+                      <div class="ui-block-b">
+                          <a href="#" id="filterReset" class="ui-btn ui-corner-all ui-btn-a ui-btn-icon-left ui-icon-delete">リセット</a>
+                      </div>
+                    </div>
                 </div>
             </form>
         </div>
