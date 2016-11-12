@@ -549,7 +549,7 @@ var onChangeCheckbox = function() {
 	  return $(this).val();
 	}).get();
 
-    if (compareNurseries.length >= 2) {
+	if (compareNurseries.length >= 2) {
 		favoriteCheckboxes.each(function(){
 			var $checkbox = $(this).find(":checkbox");
 			if (!$checkbox.is(":checked")) {
