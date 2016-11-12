@@ -95,6 +95,13 @@ $(window).on("orientationchange", function() {
 
 var initialized = false;
 $('#mainPage').on('pageshow', function() {
+	// お気に入り削除時、反映のためreload
+	var deleteFlg = document.getElementById("delete-flg").value;
+	if(deleteFlg == 1) {
+		location.reload(true);
+		document.getElementById("delete-flg").value = null;
+	}
+
 	if(initialized) {
 		return;
 	}
@@ -542,16 +549,7 @@ var onChangeCheckbox = function() {
 	  return $(this).val();
 	}).get();
 
-    if (compareNurseries.length == 1) {
-		favoriteCheckboxes.each(function(){
-			$(this).removeClass("ui-state-disabled").removeClass("ui-state-active");
-			$(this).find(":checkbox").prop("disabled", false);
-		});
-		$("#compare-btn").addClass("ui-state-disabled");
-		$("#compare-btn").prop("disabled", true);
-		$("#delete-btn").removeClass("ui-state-disabled");
-		$("#delete-btn").prop("disabled", false);
-    } else if (compareNurseries.length >= 2) {
+    if (compareNurseries.length >= 2) {
 		favoriteCheckboxes.each(function(){
 			var $checkbox = $(this).find(":checkbox");
 			if (!$checkbox.is(":checked")) {
@@ -568,8 +566,8 @@ var onChangeCheckbox = function() {
 			$(this).removeClass("ui-state-disabled").removeClass("ui-state-active");
 			$(this).find(":checkbox").prop("disabled", false);
 		});
-		$("#compare-btn, #delete-btn").addClass("ui-state-disabled");
-		$("#compare-btn, #delete-btn").prop("disabled", true);
+		$("#compare-btn").addClass("ui-state-disabled");
+		$("#compare-btn").prop("disabled", true);
 	}
 };
 $("#favorite-list").on("change", "#favorite-items .ui-checkbox :checkbox", onChangeCheckbox);
@@ -716,19 +714,6 @@ $('#compare-page').on('pageshow', function() {
 	$("#nursery-compare-body").html(content);
 });
 
-// お気に入りから外す
-$('#delete-btn').on('tap', function() {
-	var favoriteList = filter.getFavoriteFeatures(nurseryFacilities);
-	// チェックされた施設をお気に入りからremove
-	for(var i=0; i<favoriteList.length ; i++) {
-		if (compareNurseries[i] != null ) {
-			favoriteStore.removeFavorite(filter.getFeatureById(compareNurseries[i]));
-		}
-	}
-	// お気に入り一覧再構築
-	createFavoriteList();
-});
-
 // お気に入り一覧作成
 function createFavoriteList() {
 	var favoriteList = filter.getFavoriteFeatures(nurseryFacilities);
@@ -745,8 +730,20 @@ function createFavoriteList() {
 		}
 		var element = "";
 		element += "<div class='ui-checkbox'>";
-		element += "  <label for='" + id + "' class='" + styleClass + "'>" + item.properties['Name'] + "</label>";
-		element += "  <input type='checkbox' value='" + id + "' id='" + id + "' " + (compareNurseries.indexOf(id) >= 0 ? "checked='checked'" : "") + ">";
+		element += "  <div class='delete-favorite-left'>";
+		element += "  	<label for='" + id + "' class='" + styleClass + "'>" + item.properties['Name'] + "</label>";
+		element += "  	<input type='checkbox' value='" + id + "' id='" + id + "' " + (compareNurseries.indexOf(id) >= 0 ? "checked='checked'" : "") + ">";
+		element += "  </div>";
+		element += "  <div class='delete-favorite-right'>";
+		element += "  	<a id='delete-button1' value='" + id + "' href='#popupBasic' data-rel='popup' data-role='button' data-icon='delete' data-iconpos='right' data-inline='true' data-transition='pop'></a>";
+		element += "  	<div data-role='popup' id='popupBasic'>";
+		element += "  		<p>削除しますか？</p>";
+		element += "  		<ul>";
+		element += "  		 	<li><a id='delete-button2' href='#' data-rel='back' data-mini='true' class='ui-btn ui-btn-inline ui-corner-all'>はい</a></li>";
+		element += "  			<li><a href='#' data-rel='back' data-mini='true' class='ui-btn ui-btn-inline ui-corner-all'>いいえ</a></li>";
+		element += "  		</ul>";
+		element += "  	</div>";
+		element += "  </div>";
 		element += "</div>"
 
 		$items.append(element);
@@ -754,4 +751,17 @@ function createFavoriteList() {
 	$items.trigger('create');
 
 	onChangeCheckbox();
+
+	// お気に入り削除ポップアップ
+	var $deleteBtn1 = $('a#delete-button1');
+	var $deleteBtn2 = $('a#delete-button2');
+	$deleteBtn1.click(function() {
+		delVal = $(this).attr("value");
+		delTarget = filter.getFeatureById(delVal);
+		$deleteBtn2.on('tap', function() {
+			favoriteStore.removeFavorite(delTarget);
+			document.getElementById("delete-flg").value = '1';
+			createFavoriteList();
+		});
+	});
 }
