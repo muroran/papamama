@@ -22,33 +22,39 @@ Code for Sapporo の開発したさっぽろ保育園マップを千葉市にも
 
 千葉市で公開している保育所データ、および、国土数値情報ダウンロードサービスから入手できる福祉施設情報を元に独自のCSVデータを作成し利用しています。
 
-- 千葉市のオープンデータの URL を入れる
+- http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/nyuusyomatiitiran.html
+- https://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html
 - http://nlftp.mlit.go.jp/ksj/index.html
 
 ## 開発環境構築 & 開発時の起動方法
 
-### node & gulpが使用出来ない場合
+### Node.js & gulp が使用できる場合
 
-gulpが使用出来ない場合はnodeをinstallし、gulpをインストールします。
+gulp が使用できる場合は、次のコマンドで環境構築が完了します。
 
-gulpのインストール手順
-
-    $ npm install -g gulp-cli
-
-権限がない場合はsudo npm install -g gulp-cliとしてください。
-
-### node & gulpが使用できる場合
-
-gulpが使用できる場合は次のコマンドで環境構築が完了します
-
-    $ git clone https://github.com/og-kyogikai/papamama.git
+    $ git clone https://github.com/codeforchiba/papamama.git
     $ cd papamama
     $ npm install
     $ gulp serve
 
+### Node.js & gulp が使用出来ない場合
+
+gulp が使用出来ない場合は、 Node.js 及び gulp をインストールします。Node.js のインストールについては、こちらをご覧ください。
+
+- https://nodejs.org/ja/
+- https://nodejs.org/ja/download/package-manager/
+
+Node.js の実行環境をインストールした後、gulp をインストールします。
+
+    $ npm install -g gulp-cli
+
+権限がないというエラーがでた場合は、 sudo してください。
+
+    $ sudo npm install -g gulp-cli
+
 ## アプリケーションに必要なデータの作成方法
 
-国土数値情報ダウンロードサービスから以下のデータを取得してくる
+国土数値情報ダウンロードサービスから、該当する市町村の以下のデータを取得してください。
 
 - 行政区域
 - 小学校区
@@ -57,9 +63,9 @@ gulpが使用できる場合は次のコマンドで環境構築が完了しま�
 - 鉄道
 - 福祉施設
 
-ダウンロードしてきたらzipファイルを展開して、data_orgディレクトリにshpファイルとdbfファイルを配置する
+ダウンロードしてきたら zip ファイルを展開して、data_org ディレクトリにshp ファイルと dbf ファイルを配置します。
 
-以下のコマンドを実行することでdataディレクトリにgeojsonデータが生成されます。
+以下のコマンドを実行することで data ディレクトリに geojson データが生成されます。
 
     $ gulp updatedata
 
