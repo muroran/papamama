@@ -363,14 +363,19 @@ Papamamap.prototype.getPopupContent = function(feature)
         }
         return null;
     };
-    var booleanValueWithLabel = function(value, label, yValue, nValue) {
-        var a = booleanValue(value, yValue, nValue);
-        if(a === null){
-            return '';
-        }else{
-            return label + ': ' +  a + '<br />';
-        }
-    };
+
+    var kodomo = feature.get('Kodomo');
+    var shanai = feature.get('Shanai');
+    if (kodomo === 'Y' || shanai === 'Y') {
+        content += '<tr>';
+        content += '<th>施設種別</th>';
+        content += '<td>';
+        content += kodomo === 'Y' ? '認定こども園 ' : '';
+        content += shanai === 'Y' ? '事業所内保育所 ' : '';
+        content += '</td>';
+        content += '</tr>';
+    }
+
     var open  = feature.get('開園時間') ? feature.get('開園時間') : feature.get('Open');
     var close = feature.get('終園時間') ? feature.get('終園時間') : feature.get('Close');
     if (open !=  null || close != null ) {
@@ -388,20 +393,33 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<td>' + memo + '</td>';
         content += '</tr>';
     }
+
     var temp    = feature.get('一時') ? feature.get('一時') : feature.get('Temp');
     var holiday = feature.get('休日') ? feature.get('休日') : feature.get('Holiday');
     var night   = feature.get('夜間') ? feature.get('夜間') : feature.get('Night');
     var h24     = feature.get('H24') ? feature.get('H24') : feature.get('H24');
-
-    if( temp === 'Y' || holiday === 'Y' || night === 'Y' || h24 === 'Y') {
+    if (temp != null) {
         content += '<tr>';
-        content += '<th></th>';
-        content += '<td>';
-        content += booleanValueWithLabel(temp,'一時保育','あり','なし');
-        content += booleanValueWithLabel(holiday,'休日保育', 'あり','なし');
-        content += booleanValueWithLabel(night,'夜間保育','あり','なし');
-        content += booleanValueWithLabel(h24,'24時間','あり','なし');
-        content += '</td>';
+        content += '<th>一時保育</th>';
+        content += '<td>' + booleanValue(temp, 'あり', 'なし') + '</td>';
+        content += '</tr>';
+    }
+    if (holiday != null) {
+        content += '<tr>';
+        content += '<th>休日保育</th>';
+        content += '<td>' + booleanValue(holiday, 'あり', 'なし') + '</td>';
+        content += '</tr>';
+    }
+    if (night != null) {
+        content += '<tr>';
+        content += '<th>夜間保育</th>';
+        content += '<td>' + booleanValue(night, 'あり', 'なし') + '</td>';
+        content += '</tr>';
+    }
+    if (h24 != null) {
+        content += '<tr>';
+        content += '<th>24時間</th>';
+        content += '<td>' + booleanValue(h24, 'あり', 'なし') + '</td>';
         content += '</tr>';
     }
 
@@ -418,12 +436,17 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '</td>';
         content += '</tr>';
     }
+
     var vacancy = feature.get('Vacancy');
-    if(type == "認可保育所" && vacancy === 'Y') {
+    if(type == "認可保育所" && vacancy != null) {
         content += '<tr>';
         content += '<th>欠員</th>';
         content += '<td>';
-        content += '<a href="http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html" target="_blank">空きあり</a>';
+        if(vacancy === 'Y') {
+            content += '<a href="http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html" target="_blank">空きあり</a>';
+        }else if (vacancy === 'N'){
+            content += '<a href="http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html" target="_blank">空きなし</a>';
+        }
         var vacancyDate = feature.get('VacancyDate');
         if (vacancyDate != null) {
             content += " (" + vacancyDate + ")";
@@ -431,6 +454,7 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '</td>';
         content += '</tr>';
     }
+
     var ageS = feature.get('開始年齢') ? feature.get('開始年齢') : feature.get('AgeS');
     var ageE = feature.get('終了年齢') ? feature.get('終了年齢') : feature.get('AgeE');
     if (ageS != null || ageE != null) {
@@ -543,6 +567,24 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<tr>';
         content += '<th>プール</th>';
         content += '<td>' + pool + '</td>';
+        content += '</tr>';
+    }
+
+    var type = feature.get('種別') ? feature.get('種別') : feature.get('Type');
+    var sakidori_auth = booleanValue(feature.get('Sakidori_auth'), 'あり', 'なし');
+    var hoikuroom_auth = booleanValue(feature.get('Hoikuroom_auth'), 'あり', 'なし');
+    if (type === '認可外' && sakidori_auth != null && hoikuroom_auth != null){
+        content += '<tr>';
+        content += '<th>認可外認定</th>';
+        content += '<td>';
+        if(sakidori_auth != null){
+            content += '先取りプロジェクト認定' +  '(' + sakidori_auth + ')';
+        }
+        content += '<br />'
+        if(hoikuroom_auth != null){
+            content += '保育ルーム認定' +  '(' + hoikuroom_auth + ')';
+        }
+        content += '</td>';
         content += '</tr>';
     }
     var remarks = feature.get('Remarks');

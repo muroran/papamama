@@ -95,6 +95,13 @@ $(window).on("orientationchange", function() {
 
 var initialized = false;
 $('#mainPage').on('pageshow', function() {
+	// お気に入り削除時、反映のためreload
+	var deleteFlg = document.getElementById("delete-flg").value;
+	if(deleteFlg == 1) {
+		location.reload(true);
+		document.getElementById("delete-flg").value = null;
+	}
+
 	if(initialized) {
 		return;
 	}
@@ -343,48 +350,54 @@ $('#mainPage').on('pageshow', function() {
 		conditions = [];
 		ninka = ninkagai = kindergarten = false;
 
-		// 認可保育園
-		if($('#ninkaOpenTime option:selected').val() !== "") {
-			conditions['ninkaOpenTime'] = $('#ninkaOpenTime option:selected').val();
-			ninka = true;
+		// 保育園
+		if($('#OpenTime option:selected').val() !== "") {
+			conditions['OpenTime'] = $('#OpenTime option:selected').val();
+			ninka = ninkagai = true;
 		}
-		if($('#ninkaCloseTime option:selected').val() !== "") {
-			conditions['ninkaCloseTime'] = $('#ninkaCloseTime option:selected').val();
-			ninka = true;
+		if($('#CloseTime option:selected').val() !== "") {
+			conditions['CloseTime'] = $('#CloseTime option:selected').val();
+			ninka = ninkagai = true;
 		}
-		if($('#ninkaIchijiHoiku').prop('checked')) {
-			conditions['ninkaIchijiHoiku'] = 1;
-			ninka = true;
+		if($('#IchijiHoiku').prop('checked')) {
+			conditions['IchijiHoiku'] = 1;
+			ninka = ninkagai = true;
 		}
-		if($('#ninkaYakan').prop('checked')) {
-			conditions['ninkaYakan'] = 1;
-			ninka = true;
+		if($('#Yakan').prop('checked')) {
+			conditions['Yakan'] = 1;
+			ninka = ninkagai = true;
 		}
-		if($('#ninkaKyujitu').prop('checked')) {
-			conditions['ninkaKyujitu'] = 1;
-			ninka = true;
+		if($('#Kyujitu').prop('checked')) {
+			conditions['Kyujitu'] = 1;
+			ninka = ninkagai = true;
 		}
-		if($('#ninkaVacancy').prop('checked')) {
-			conditions['ninkaVacancy'] = 1;
-			ninka = true;
+		if($('#Vacancy').prop('checked')) {
+			conditions['Vacancy'] = 1;
+			ninka = ninkagai = true;
 		}
-
-		// 認可外
-		if($('#ninkagaiOpenTime option:selected').val() !== "") {
-			conditions['ninkagaiOpenTime'] = $('#ninkagaiOpenTime option:selected').val();
+		if($('#24H').prop('checked')) {
+			conditions['24H'] = 1;
+			ninka = ninkagai = true;
+		}
+		// 先取りプロジェクト認定
+		if($('#Sakidori_auth').prop('checked')) {
+			conditions['Sakidori_auth'] = 1;
 			ninkagai = true;
 		}
-		if($('#ninkagaiCloseTime option:selected').val() !== "") {
-			conditions['ninkagaiCloseTime'] = $('#ninkagaiCloseTime option:selected').val();
+		// 保育ルーム認定
+		if($('#Hoikuroom_auth').prop('checked')) {
+			conditions['Hoikuroom_auth'] = 1;
 			ninkagai = true;
 		}
-		if($('#ninkagai24H').prop('checked')) {
-			conditions['ninkagai24H'] = 1;
-			ninkagai = true;
+		// こども園
+		if($('#Kodomo').prop('checked')) {
+			conditions['Kodomo'] = 1;
+			ninka = ninkagai = kindergarten = true;
 		}
-		if($('#ninkagaiShomei').prop('checked')) {
-			conditions['ninkagaiShomei'] = 1;
-			ninkagai = true;
+		// 事業所内保育所
+		if($('#Shanai').prop('checked')) {
+			conditions['Shanai'] = 1;
+			ninka = ninkagai = true;
 		}
 
 		// 幼稚園
@@ -525,29 +538,8 @@ $('#mainPage').on('pageshow', function() {
  */
 // 表示処理
 $('#favorite-list').on('pageshow', function() {
-	var favoriteList = filter.getFavoriteFeatures(nurseryFacilities);
-	var $items = $("#favorite-items");
-	$items.children().remove();
-	favoriteList.forEach(function(item, index){
-		var id = favoriteStore.getId(item);
-		var styleClass = "ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-on";
-		if (index === 0) {
-			styleClass += " ui-first-child";
-		}
-		if (index === favoriteList.length - 1) {
-			styleClass += " ui-last-child";
-		}
-		var element = "";
-		element += "<div class='ui-checkbox'>";
-		element += "  <label for='" + id + "' class='" + styleClass + "'>" + item.properties['Name'] + "</label>";
-		element += "  <input type='checkbox' value='" + id + "' id='" + id + "' " + (compareNurseries.indexOf(id) >= 0 ? "checked='checked'" : "") + ">";
-		element += "</div>"
-
-		$items.append(element);
-	});
-	$items.trigger('create');
-
-	onChangeCheckbox();
+	// お気に入り一覧作成
+	createFavoriteList();
 });
 
 // チェックボックス選択時
@@ -619,6 +611,13 @@ $('#compare-page').on('pageshow', function() {
 	var content = '';
 	// 種別
 	content += compareDataDom("種別", nursery1["Type"], nursery2["Type"], "nursery-type");
+	// 施設種別
+	var kodomo1  = nursery1["Kodomo"] === 'Y' ? '認定こども園' : "";
+	var shanai1 = nursery1["Shanai"] === 'Y' ? '事業所内保育所' : "";
+	var kodomo2  = nursery2["Kodomo"] === 'Y' ? '認定こども園' : "";
+	var shanai2 = nursery2["Shanai"] === 'Y' ? '事業所内保育所' : "";
+	content += compareDataDom("施設種別", kodomo1+shanai1 || null, kodomo2+shanai2 || null, "nursery-type");
+
 	// 時間
 	var open1  = nursery1["Open"] || "";
 	var close1 = nursery1["Close"] || "";
@@ -703,8 +702,66 @@ $('#compare-page').on('pageshow', function() {
 	content += compareDataDom("保育室広さ", playroom1, playroom2);
 	// プール
 	content += compareBooleanDataDom("プール", nursery1["Pool"], nursery2["Pool"], 'あり', 'なし');
+	if(nursery1['Type'] === '認可外' && nursery2['Type'] === '認可外') {
+		// 先取りプロジェクト認定
+		content += compareBooleanDataDom("先取りプロジェクト認定", nursery1["Sakidori_auth"], nursery2["Sakidori_auth"], 'あり', 'なし');
+		// 保育ルーム認定
+		content += compareBooleanDataDom("保育ルーム認定", nursery1["Hoikuroom_auth"], nursery2["Hoikuroom_auth"], 'あり', 'なし');
+	}
 	// 備考
 	content += compareDataDom("備考", nursery1["Remarks"], nursery2["Remarks"]);
 
 	$("#nursery-compare-body").html(content);
 });
+
+// お気に入り一覧作成
+function createFavoriteList() {
+	var favoriteList = filter.getFavoriteFeatures(nurseryFacilities);
+	var $items = $("#favorite-items");
+	$items.children().remove();
+	favoriteList.forEach(function(item, index){
+		var id = favoriteStore.getId(item);
+		var styleClass = "ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-on";
+		if (index === 0) {
+			styleClass += " ui-first-child";
+		}
+		if (index === favoriteList.length - 1) {
+			styleClass += " ui-last-child";
+		}
+		var element = "";
+		element += "<div class='ui-checkbox'>";
+		element += "  <div class='delete-favorite-left'>";
+		element += "  	<label for='" + id + "' class='" + styleClass + "'>" + item.properties['Name'] + "</label>";
+		element += "  	<input type='checkbox' value='" + id + "' id='" + id + "' " + (compareNurseries.indexOf(id) >= 0 ? "checked='checked'" : "") + ">";
+		element += "  </div>";
+		element += "  <div class='delete-favorite-right'>";
+		element += "  	<a id='delete-button1' value='" + id + "' href='#popupBasic' data-rel='popup' data-role='button' data-icon='delete' data-iconpos='right' data-inline='true' data-transition='pop'></a>";
+		element += "  	<div data-role='popup' id='popupBasic'>";
+		element += "  		<p>削除しますか？</p>";
+		element += "  		<ul>";
+		element += "  		 	<li><a id='delete-button2' href='#' data-rel='back' data-mini='true' class='ui-btn ui-btn-inline ui-corner-all'>はい</a></li>";
+		element += "  			<li><a href='#' data-rel='back' data-mini='true' class='ui-btn ui-btn-inline ui-corner-all'>いいえ</a></li>";
+		element += "  		</ul>";
+		element += "  	</div>";
+		element += "  </div>";
+		element += "</div>"
+
+		$items.append(element);
+	});
+	$items.trigger('create');
+
+	onChangeCheckbox();
+
+	// お気に入り削除ポップアップ
+	var $deleteBtn1 = $('a#delete-button1');
+	var $deleteBtn2 = $('a#delete-button2');
+	$deleteBtn1.click(function() {
+		delVal = $(this).attr("value");
+		delTarget = filter.getFeatureById(delVal);
+		$deleteBtn2.on('tap', function() {
+			favoriteStore.removeFavorite(delTarget);
+			document.getElementById("delete-flg").value = '1';
+			createFavoriteList();
+		});
+	});
+}
