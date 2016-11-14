@@ -95,6 +95,13 @@ $(window).on("orientationchange", function() {
 
 var initialized = false;
 $('#mainPage').on('pageshow', function() {
+	// お気に入り削除時、反映のためreload
+	var deleteFlg = document.getElementById("delete-flg").value;
+	if(deleteFlg == 1) {
+		location.reload(true);
+		document.getElementById("delete-flg").value = null;
+	}
+
 	if(initialized) {
 		return;
 	}
@@ -531,29 +538,8 @@ $('#mainPage').on('pageshow', function() {
  */
 // 表示処理
 $('#favorite-list').on('pageshow', function() {
-	var favoriteList = filter.getFavoriteFeatures(nurseryFacilities);
-	var $items = $("#favorite-items");
-	$items.children().remove();
-	favoriteList.forEach(function(item, index){
-		var id = favoriteStore.getId(item);
-		var styleClass = "ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-on";
-		if (index === 0) {
-			styleClass += " ui-first-child";
-		}
-		if (index === favoriteList.length - 1) {
-			styleClass += " ui-last-child";
-		}
-		var element = "";
-		element += "<div class='ui-checkbox'>";
-		element += "  <label for='" + id + "' class='" + styleClass + "'>" + item.properties['Name'] + "</label>";
-		element += "  <input type='checkbox' value='" + id + "' id='" + id + "' " + (compareNurseries.indexOf(id) >= 0 ? "checked='checked'" : "") + ">";
-		element += "</div>"
-
-		$items.append(element);
-	});
-	$items.trigger('create');
-
-	onChangeCheckbox();
+	// お気に入り一覧作成
+	createFavoriteList();
 });
 
 // チェックボックス選択時
@@ -727,3 +713,55 @@ $('#compare-page').on('pageshow', function() {
 
 	$("#nursery-compare-body").html(content);
 });
+
+// お気に入り一覧作成
+function createFavoriteList() {
+	var favoriteList = filter.getFavoriteFeatures(nurseryFacilities);
+	var $items = $("#favorite-items");
+	$items.children().remove();
+	favoriteList.forEach(function(item, index){
+		var id = favoriteStore.getId(item);
+		var styleClass = "ui-btn ui-corner-all ui-btn-inherit ui-btn-icon-left ui-checkbox-on";
+		if (index === 0) {
+			styleClass += " ui-first-child";
+		}
+		if (index === favoriteList.length - 1) {
+			styleClass += " ui-last-child";
+		}
+		var element = "";
+		element += "<div class='ui-checkbox'>";
+		element += "  <div class='delete-favorite-left'>";
+		element += "  	<label for='" + id + "' class='" + styleClass + "'>" + item.properties['Name'] + "</label>";
+		element += "  	<input type='checkbox' value='" + id + "' id='" + id + "' " + (compareNurseries.indexOf(id) >= 0 ? "checked='checked'" : "") + ">";
+		element += "  </div>";
+		element += "  <div class='delete-favorite-right'>";
+		element += "  	<a id='delete-button1' value='" + id + "' href='#popupBasic' data-rel='popup' data-role='button' data-icon='delete' data-iconpos='right' data-inline='true' data-transition='pop'></a>";
+		element += "  	<div data-role='popup' id='popupBasic'>";
+		element += "  		<p>削除しますか？</p>";
+		element += "  		<ul>";
+		element += "  		 	<li><a id='delete-button2' href='#' data-rel='back' data-mini='true' class='ui-btn ui-btn-inline ui-corner-all'>はい</a></li>";
+		element += "  			<li><a href='#' data-rel='back' data-mini='true' class='ui-btn ui-btn-inline ui-corner-all'>いいえ</a></li>";
+		element += "  		</ul>";
+		element += "  	</div>";
+		element += "  </div>";
+		element += "</div>"
+
+		$items.append(element);
+	});
+	$items.trigger('create');
+
+	onChangeCheckbox();
+
+	// お気に入り削除ポップアップ
+	var $deleteBtn1 = $('a#delete-button1');
+	var $deleteBtn2 = $('a#delete-button2');
+	$deleteBtn1.click(function() {
+		delVal = $(this).attr("value");
+		delTarget = filter.getFeatureById(delVal);
+		$deleteBtn2.on('tap', function() {
+			favoriteStore.removeFavorite(delTarget);
+			document.getElementById("delete-flg").value = '1';
+			createFavoriteList();
+		});
+	});
+}
