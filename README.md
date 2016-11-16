@@ -1,14 +1,16 @@
-# オープンガバメント推進協議会版保育園マップについて
+# 千葉市版保育園マップについて
 
-全国１２自治体で構成されているオープンガバメント推進協議会は、「ビッグデータ・オープンデータの具体的な活用策の検討」等に取り組むことで、市民サービスの向上や、経済活性化に寄与することなどを目的に活動しています。
+Code for Sapporo の開発したさっぽろ保育園マップを千葉市にも作ろう！ ということで開発しました。
 
-- https://www.facebook.com/ogkyogikai/
+千葉市版は、さっぽろ保育園マップをベースに作られたオープンガバメント推進協議会版をベースに機能追加と、千葉市の制度に合わせております。
 
-同協議会の取組みの１つとして、民間団体等と連携し、様々な自治体が抱えている課題である「保活」や「子育て世代の住まい探し」に役立つアプリケーションとして、「オープンガバメント推進協議会版保育園マップ」を作成しました。こちらのアプリケーションは、さっぽろ保育園マップをフォークして作られています。
+さっぽろ保育園マップについては、こちら。
 
 - http://www.codeforsapporo.org/papamama/
 
-オープンガバメント推進協議会版保育園マップには、サンプルとして千葉市のデータをいれております（平成２８年１０月現在のデータ）が、当該マップはあくまで基礎であり、今後この基礎マップを元に、より地域に根差した「○○市保育園マップ」の作成を検討していくために作られたものです。
+オープンガバメント推進協議会については、こちらをどうぞ。
+
+- https://www.facebook.com/ogkyogikai/
 
 ## 利用している地図について
 
@@ -16,36 +18,43 @@
 
 - http://portal.cyberjapan.jp/help/development/ichiran.html
 
-## サンプルとして用意しているデータについて
+## 保育園マップで使われるデータについて
 
 千葉市で公開している保育所データ、および、国土数値情報ダウンロードサービスから入手できる福祉施設情報を元に独自のCSVデータを作成し利用しています。
 
+- http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/nyuusyomatiitiran.html
+- https://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html
 - http://nlftp.mlit.go.jp/ksj/index.html
 
 ## 開発環境構築 & 開発時の起動方法
 
-### node & gulpが使用出来ない場合
+### Node.js & gulp が使用できる場合
 
-gulpが使用出来ない場合はnodeをinstallし、gulpをインストールします。
+gulp が使用できる場合は、次のコマンドで環境構築が完了します。
 
-gulpのインストール手順
-
-    $ npm install -g gulp-cli
-
-権限がない場合はsudo npm install -g gulp-cliとしてください。
-
-### node & gulpが使用できる場合
-
-gulpが使用できる場合は次のコマンドで環境構築が完了します
-
-    $ git clone https://github.com/og-kyogikai/papamama.git
+    $ git clone https://github.com/codeforchiba/papamama.git
     $ cd papamama
     $ npm install
     $ gulp serve
 
+### Node.js & gulp が使用出来ない場合
+
+gulp が使用出来ない場合は、 Node.js 及び gulp をインストールします。Node.js のインストールについては、こちらをご覧ください。
+
+- https://nodejs.org/ja/
+- https://nodejs.org/ja/download/package-manager/
+
+Node.js の実行環境をインストールした後、gulp をインストールします。
+
+    $ npm install -g gulp-cli
+
+権限がないというエラーがでた場合は、 sudo してください。
+
+    $ sudo npm install -g gulp-cli
+
 ## アプリケーションに必要なデータの作成方法
 
-国土数値情報ダウンロードサービスから以下のデータを取得してくる
+国土数値情報ダウンロードサービスから、該当する市町村の以下のデータを取得してください。
 
 - 行政区域
 - 小学校区
@@ -54,9 +63,9 @@ gulpが使用できる場合は次のコマンドで環境構築が完了しま�
 - 鉄道
 - 福祉施設
 
-ダウンロードしてきたらzipファイルを展開して、data_orgディレクトリにshpファイルとdbfファイルを配置する
+ダウンロードしてきたら zip ファイルを展開して、data_org ディレクトリにshp ファイルと dbf ファイルを配置します。
 
-以下のコマンドを実行することでdataディレクトリにgeojsonデータが生成されます。
+以下のコマンドを実行することで data ディレクトリに geojson データが生成されます。
 
     $ gulp updatedata
 
