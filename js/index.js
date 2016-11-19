@@ -95,13 +95,6 @@ $(window).on("orientationchange", function() {
 
 var initialized = false;
 $('#mainPage').on('pageshow', function() {
-	// お気に入り削除時、反映のためreload
-	var deleteFlg = document.getElementById("delete-flg").value;
-	if(deleteFlg == 1) {
-		location.reload(true);
-		document.getElementById("delete-flg").value = null;
-	}
-
 	if(initialized) {
 		return;
 	}
@@ -209,7 +202,7 @@ $('#mainPage').on('pageshow', function() {
 			}
 			$addFavoriteBtn.on('click',function(){
 				favoriteStore.addFavorite(feature);
-				papamamap.updateNurseryStyle(feature);
+				papamamap.updateNurseryStyle(feature, null);
 				$addFavoriteBtn.hide();
 				$removeFavoriteBtn.show();
 
@@ -218,7 +211,7 @@ $('#mainPage').on('pageshow', function() {
 			});
 			$removeFavoriteBtn.on('click',function(){
 				favoriteStore.removeFavorite(feature);
-				papamamap.updateNurseryStyle(feature);
+				papamamap.updateNurseryStyle(feature, null);
 				$addFavoriteBtn.show();
 				$removeFavoriteBtn.hide();
 
@@ -758,9 +751,10 @@ function createFavoriteList() {
 	$deleteBtn1.click(function() {
 		delVal = $(this).attr("value");
 		delTarget = filter.getFeatureById(delVal);
+		delProperties = delTarget.properties;
 		$deleteBtn2.on('tap', function() {
 			favoriteStore.removeFavorite(delTarget);
-			document.getElementById("delete-flg").value = '1';
+			papamamap.updateNurseryStyle(delProperties, delVal);
 			createFavoriteList();
 		});
 	});

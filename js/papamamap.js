@@ -705,22 +705,30 @@ Papamamap.prototype.switchLayer = function(layerName, visible) {
     });
 };
 
-Papamamap.prototype.updateNurseryStyle = function(feature) {
-  var type = feature.get('種別') ? feature.get('種別') :  feature.get('Type');
-  if(type === undefined) {
-    return;
-  }
-  var overlay = this.featureOverlays[type];
-  var id = favoriteStore.getId(feature);
-
-  var features = overlay.getSource().getFeatures();
-  if (features != null && features.length > 0) {
-    for (x in features) {
-      if (id === favoriteStore.getId(features[x])) {
-        overlay.getSource().removeFeature(features[x]);
-        overlay.getSource().addFeature(features[x]);
-        break;
-      }
+Papamamap.prototype.updateNurseryStyle = function(feature, setId) {
+    var type = null;
+    var id = null;
+    if (feature.Type != null) {
+        // お気に入り一覧画面からTypeを取得する場合
+        type = feature.Type;
+        id = setId;
+    } else {
+        type = feature.get('種別') ? feature.get('種別') :  feature.get('Type');
+        id = favoriteStore.getId(feature);
     }
-  }
+    if(type === undefined) {
+        return;
+    }
+    var overlay = this.featureOverlays[type];
+
+    var features = overlay.getSource().getFeatures();
+    if (features != null && features.length > 0) {
+        for (x in features) {
+            if (id === favoriteStore.getId(features[x])) {
+                overlay.getSource().removeFeature(features[x]);
+                overlay.getSource().addFeature(features[x]);
+                break;
+            }
+        }
+    }
 }
