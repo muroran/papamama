@@ -608,6 +608,14 @@ $('#compare-page').on('pageshow', function() {
 		}
 		return null;
 	}
+
+	var dateValue = function(dateStr) {
+		if (dateStr == null || dateStr.length !== 8) {
+			return dateStr;
+		}
+		return dateStr.substring(0,4) + '/' + dateStr.substring(4,6) + '/' +dateStr.substring(6,8);
+	}
+
 	var content = '';
 	// 種別
 	content += compareDataDom("種別", nursery1["Type"], nursery2["Type"], "nursery-type");
@@ -646,13 +654,13 @@ $('#compare-page').on('pageshow', function() {
 	if (nursery1["Type"] === "認可保育所") {
 		vacancy1 = booleanValue(nursery1["Vacancy"], '空きあり', '空きなし');
 		if (nursery1["VacancyDate"] != null) {
-				vacancy1 += "<br> (" + nursery1["VacancyDate"] + ")";
+				vacancy1 += "<br> (" + dateValue(nursery1["VacancyDate"]) + ")";
 		}
 	}
 	if (nursery2["Type"] === "認可保育所") {
 		vacancy2 = booleanValue(nursery2["Vacancy"], '空きあり', '空きなし');
 		if (nursery2["VacancyDate"] != null) {
-				vacancy2 += "<br> (" + nursery2["VacancyDate"] + ")";
+				vacancy2 += "<br> (" + dateValue(nursery2["VacancyDate"]) + ")";
 		}
 	}
 	content += compareDataDom("欠員", vacancy1, vacancy2, '空きあり', '空きなし');
@@ -691,7 +699,7 @@ $('#compare-page').on('pageshow', function() {
 	var competition2 = nursery2["Cost"] ? nursery2["Cost"] + '倍' : null;
 	content += compareDataDom("申込倍率", competition1, competition2);
 	// 建築年月日
-	content += compareDataDom("建築年月日", nursery1["Openingdate"], nursery2["Openingdate"]);
+	content += compareDataDom("建築年月日", dateValue(nursery1["Openingdate"]), dateValue(nursery2["Openingdate"]));
 	// 園庭広さ
 	var playground1 = nursery1["Playground"] ? nursery1["Playground"] + '㎡' : null;
 	var playground2 = nursery2["Playground"] ? nursery2["Playground"] + '㎡' : null;
