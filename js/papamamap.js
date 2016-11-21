@@ -364,6 +364,13 @@ Papamamap.prototype.getPopupContent = function(feature)
         return null;
     };
 
+    var dateValue = function(dateStr) {
+      if (dateStr == null || dateStr.length !== 8) {
+        return dateStr;
+      }
+      return dateStr.substring(0,4) + '/' + dateStr.substring(4,6) + '/' +dateStr.substring(6,8);
+    }
+
     var kodomo = feature.get('Kodomo');
     var shanai = feature.get('Shanai');
     if (kodomo === 'Y' || shanai === 'Y') {
@@ -449,7 +456,7 @@ Papamamap.prototype.getPopupContent = function(feature)
         }
         var vacancyDate = feature.get('VacancyDate');
         if (vacancyDate != null) {
-            content += " (" + vacancyDate + ")";
+            content += " (" + dateValue(vacancyDate) + ")";
         }
         content += '</td>';
         content += '</tr>';
@@ -545,7 +552,7 @@ Papamamap.prototype.getPopupContent = function(feature)
     if (openingdate != null) {
         content += '<tr>';
         content += '<th>建築年月日</th>';
-        content += '<td>' + openingdate + '</td>';
+        content += '<td>' + dateValue(openingdate) + '</td>';
         content += '</tr>';
     }
     var playground = feature.get('Playground');
