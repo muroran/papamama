@@ -1,7 +1,7 @@
 {
-  "name": "papamama",
+  "name": "cfc-papamama",
   "version": "1.0.0",
-  "description": "保育園検索アプリ",
+  "description": "ちば保育園マップ",
   "directories": {
     "doc": "doc"
   },
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/og-kyogikai/papamama.git"
+    "url": "git+https://github.com/codeforchiba/papamama.git"
   },
-  "author": "code for chiba",
+  "author": "Code for Chiba",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/og-kyogikai/papamama/issues"
+    "url": "https://github.com/codeforchiba/papamama/issues"
   },
-  "homepage": "https://github.com/og-kyogikai/papamama#readme",
+  "homepage": "https://github.com/codeforchiba/papamama#readme",
   "devDependencies": {
     "browser-sync": "^2.11.1",
     "csv": "^1.1.0",
