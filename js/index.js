@@ -676,6 +676,8 @@ $('#compare-page').on('pageshow', function() {
 	content += compareDataDom("定員", nursery1["Full"] ? nursery1["Full"] + '人' : null, nursery2["Full"] ? nursery2["Full"] + '人' : null);
 	// TEL
 	content += compareDataDom("TEL", nursery1["TEL"], nursery2["TEL"]);
+	// FAX
+	content += compareDataDom("FAX", nursery1["FAX"], nursery2["FAX"]);
 	// 住所
 	var adr1 = (nursery1["Add1"] || "") + (nursery1["Add2"] || "" );
 	var adr2 = (nursery2["Add1"] || "") + (nursery2["Add2"] || "" );
