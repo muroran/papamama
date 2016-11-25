@@ -348,59 +348,45 @@ $('#mainPage').on('pageshow', function() {
 	$('#filterApply').click(function(evt){
 		// 条件作成処理
 		conditions = [];
-		ninka = ninkagai = kindergarten = false;
 
 		// 保育園
 		if($('#OpenTime option:selected').val() !== "") {
 			conditions['OpenTime'] = $('#OpenTime option:selected').val();
-			ninka = ninkagai = true;
 		}
 		if($('#CloseTime option:selected').val() !== "") {
 			conditions['CloseTime'] = $('#CloseTime option:selected').val();
-			ninka = ninkagai = true;
 		}
 		if($('#IchijiHoiku').prop('checked')) {
 			conditions['IchijiHoiku'] = 1;
-			ninka = ninkagai = true;
 		}
 		if($('#Yakan').prop('checked')) {
 			conditions['Yakan'] = 1;
-			ninka = ninkagai = true;
 		}
 		if($('#Kyujitu').prop('checked')) {
 			conditions['Kyujitu'] = 1;
-			ninka = ninkagai = true;
 		}
 		if($('#Vacancy').prop('checked')) {
 			conditions['Vacancy'] = 1;
-			ninka = ninkagai = true;
 		}
 		if($('#24H').prop('checked')) {
 			conditions['24H'] = 1;
-			ninka = ninkagai = true;
 		}
 		// 先取りプロジェクト認定
 		if($('#Sakidori_auth').prop('checked')) {
 			conditions['Sakidori_auth'] = 1;
-			ninkagai = true;
 		}
 		// 保育ルーム認定
 		if($('#Hoikuroom_auth').prop('checked')) {
 			conditions['Hoikuroom_auth'] = 1;
-			ninkagai = true;
 		}
 		// こども園
 		if($('#Kodomo').prop('checked')) {
 			conditions['Kodomo'] = 1;
-			ninka = ninkagai = kindergarten = true;
 		}
 		// 事業所内保育所
 		if($('#Shanai').prop('checked')) {
 			conditions['Shanai'] = 1;
-			ninka = ninkagai = true;
 		}
-
-		// 幼稚園
 
 		// フィルター適用時
 		if(Object.keys(conditions).length > 0) {
@@ -410,11 +396,7 @@ $('#mainPage').on('pageshow', function() {
 		} else {
 			papamamap.addNurseryFacilitiesLayer(nurseryFacilities);
 			$('#btnFilter').css('background-color', '#f6f6f6');
-			ninka = ninkagai = kindergarten = true;
 		}
-
-		// レイヤー表示状態によって施設の表示を切り替える
-		updateLayerStatus({ninka: ninka, ninkagai: ninkagai, kindergarten: kindergarten});
 	});
 
 	// 絞込条件のリセット
