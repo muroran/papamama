@@ -18,24 +18,16 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
     };
     // console.log("getFilteredFeaturesGeoJson");
 
-    // 保育園の検索元データを取得
-    var hoikuenFeatures = [];
+    // 保育園,幼稚園の検索元データを取得
+    var Features = [];
     _features = nurseryFacilities.features.filter(function (item,idx) {
             var type = item.properties['種別'] ? item.properties['種別'] : item.properties['Type'];
-            if(type == "認可保育所" || type == "認可外") return true;
+            if(type == "認可保育所" || type == "認可外" || type == "幼稚園") return true;
         });
-    Array.prototype.push.apply(hoikuenFeatures, _features);
-
-    // 幼稚園の検索元データを取得
-    var youchienFeatures = [];
-    _features = nurseryFacilities.features.filter(function (item,idx) {
-            var type = item.properties['種別'] ? item.properties['種別'] : item.properties['Type'];
-            if(type == "幼稚園") return true;
-        });
-    Array.prototype.push.apply(youchienFeatures, _features);
+    Array.prototype.push.apply(Features, _features);
 
     // ----------------------------------------------------------------------
-    // 保育園向けフィルター
+    // 保育園,幼稚園向けフィルター
     // ----------------------------------------------------------------------
     // 開園時間
     // console.log("[before]ninkaFeatures length:", ninkaFeatures.length);
@@ -44,13 +36,15 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
             f = function (item,idx) {
                 var _time = conditions['OpenTime'];
                 var open = item.properties['開園時間'] ? item.properties['開園時間'] : item.properties['Open'];
-                if(open <= _time) {
-                    return true;
+                if( open != null) {
+                    if(open <= _time) {
+                        return true;
+                    }
                 }
             };
             return f(item,idx);
         };
-        hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
+        Features = Features.filter(filterfunc);
     }
     // 終園時間
     if(conditions['CloseTime']) {
@@ -58,22 +52,23 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
             f = function (item,idx) {
                 var _time = conditions['CloseTime'];
                 var close = item.properties['終園時間'] ? item.properties['終園時間'] : item.properties['Close'];
+                if( close != null) {
+                    // 終園時間が0時or翌日の場合は、24時間プラス
+                    if(close == '0:00' || close.substr(0,1) == '翌') {
+                        var index = close.indexOf('：');
+                        var hour = Number(close.substr(1,index-1)) + 24;
+                        var minute = close.substr(index+1);
+                        close = hour + ':' + minute;
+                    }
 
-                // 終園時間が0時or翌日の場合は、24時間プラス
-                if(close == '0:00' || close.substr(0,1) == '翌') {
-                    var index = close.indexOf('：');
-                    var hour = Number(close.substr(1,index-1)) + 24;
-                    var minute = close.substr(index+1);
-                    close = hour + ':' + minute;
-                }
-
-                if(close >= _time) {
-                    return true;
+                    if(close >= _time) {
+                        return true;
+                    }
                 }
             };
             return f(item,idx);
         };
-        hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
+        Features = Features.filter(filterfunc);
     }
     // 一時保育
     if(conditions['IchijiHoiku']) {
@@ -83,7 +78,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
                 return true;
             }
         };
-        hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
+        Features = Features.filter(filterfunc);
     }
     // 夜間
     if(conditions['Yakan']) {
@@ -93,7 +88,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
                 return true;
             }
         };
-        hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
+        Features = Features.filter(filterfunc);
     }
     // 休日
     if(conditions['Kyujitu']) {
@@ -103,7 +98,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
                 return true;
             }
         };
-        hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
+        Features = Features.filter(filterfunc);
     }
     // 空き状況
     if(conditions['Vacancy']) {
@@ -113,7 +108,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
                 return true;
             }
         };
-        hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
+        Features = Features.filter(filterfunc);
     }
     // console.log("[after]ninkaFeatures length:", ninkaFeatures.length);
 
@@ -125,7 +120,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
                 return true;
             }
         };
-        hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
+        Features = Features.filter(filterfunc);
     }
     // 先取りプロジェクト認定あり
     if(conditions['Sakidori_auth']) {
@@ -135,7 +130,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
                 return true;
             }
         };
-        hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
+        Features = Features.filter(filterfunc);
     }
     // 保育ルーム認定あり
     if(conditions['Hoikuroom_auth']) {
@@ -145,7 +140,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
                 return true;
             }
         };
-        hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
+        Features = Features.filter(filterfunc);
     }
     // 事業所内保育所
     if(conditions['Shanai']) {
@@ -155,7 +150,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
                 return true;
             }
         };
-        hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
+        Features = Features.filter(filterfunc);
     }
     // こども園
     if(conditions['Kodomo']) {
@@ -165,20 +160,12 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
                 return true;
             }
         };
-        hoikuenFeatures = hoikuenFeatures.filter(filterfunc);
-        youchienFeatures = youchienFeatures.filter(filterfunc);
+        Features = Features.filter(filterfunc);
     }
     // console.log("[after]ninkagaiFeatures length:", ninkagaiFeatures.length);
-
-    // ----------------------------------------------------------------------
-    // 幼稚園向けフィルター
-    // ----------------------------------------------------------------------
-    // まだ用意しない
-
     // 戻り値の作成
     var features = [];
-    Array.prototype.push.apply(features, hoikuenFeatures);
-    Array.prototype.push.apply(features, youchienFeatures);
+    Array.prototype.push.apply(features, Features);
     // console.log("getFilteredFeaturesGeoJson: return value: ", features.length);
     newGeoJson.features = features;
     return newGeoJson;
