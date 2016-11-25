@@ -1,5 +1,5 @@
 /* CSS Document */
-.ui-content {
+#mainPage .ui-content {
 	margin: 0;
 	padding: 0 !important;
 }
@@ -49,9 +49,8 @@
 	position: absolute;
 	background-color: white;
 	width: 300px;
-	bottom: 12px;
-	top: -192px;
 	left: -150px;
+
 	border-radius: 10px;
 	border: 1px solid #cccccc;
 	-webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.5));
@@ -98,10 +97,29 @@
 	right: -5px;
 }
 
+.ol-popup #popup-nav .ui-btn {
+	margin-top: 0;
+	border-top: none;
+}
+
+.ol-popup #popup-nav .ui-btn.ui-state-active {
+	background-color: #ff0;
+}
+
+.ol-popup table {
+	width: 100%;
+}
+
+#popup-content {
+	max-height: 300px;
+	overflow: scroll;
+}
+
 #popup-content th {
-	width: 4.5em;
+	width: 5.5em;
 	vertical-align: top;
 	background-color: white;
+	white-space: nowrap;
 }
 
 #popup-content td {
@@ -146,4 +164,98 @@ h3 {
 
 legend {
 	margin-bottom: 0;
+}
+
+/** お気に入り一覧 */
+#favorite-list .ui-controlgroup, fieldset.ui-controlgroup {
+	margin: 0;
+}
+
+#favorite-list form .ui-controlgroup-vertical .ui-btn {
+	border-radius: 0;
+	border-left: none;
+	border-right: none;
+}
+
+#favorite-list .ui-controlgroup-vertical .ui-state-active .ui-btn {
+	border-bottom-width: 1px;
+}
+
+#favorite-list .ui-controlgroup-vertical .ui-state-active + .ui-state-active .ui-btn {
+	border-top-width: 0;
+}
+
+/* 園比較テーブル */
+table.nursery-compare thead th {
+	background-color: #fff;
+}
+
+table.nursery-compare thead th h3 {
+    font-size: .9em;
+		margin-top: .4em;
+    margin-bottom: .8em;
+}
+
+table.nursery-compare th.item-label {
+	text-transform: uppercase;
+	font-size: 0.6em;
+	opacity: 0.5;
+	padding: 1.2em .8em;
+	background-color: #ddd;
+	white-space: nowrap;
+}
+
+table.nursery-compare tbody tr.nursery-type td {
+	background-color: #fff;
+}
+
+table.nursery-compare tbody td {
+	width: 50%;
+}
+
+
+/* お気に入り削除 */
+div#favorite-list div.ui-controlgroup-controls div.ui-checkbox {
+	display:table;
+	width: 100%;
+}
+
+div#favorite-list div.ui-controlgroup-controls div.ui-checkbox div.delete-favorite-left {
+	display:table-cell;
+	width: 95%;
+	background-color: #f6f6f6;
+	border-bottom: 1px solid #ddd;
+}
+
+div#favorite-list div.ui-controlgroup-controls div.ui-checkbox div.delete-favorite-right {
+	display:table-cell;
+	width: 5%;
+	background-color: #f6f6f6;
+	border-bottom: 1px solid #ddd;
+}
+
+div#favorite-list div.ui-controlgroup-controls div.ui-checkbox div.delete-favorite-left label {
+	margin-bottom: 1px;
+	border: 0px;
+}
+
+div#favorite-list div.ui-controlgroup-controls div.ui-checkbox div.delete-favorite-right a {
+	border-style: none;
+}
+
+div#favorite-list div#popupBasic-popup div#popupBasic {
+	padding: 5%;
+}
+
+div#favorite-list div#popupBasic-popup div#popupBasic ul li {
+	display: inline-block;
+	width: 40%;
+}
+
+div#favorite-list div#popupBasic-popup div#popupBasic ul li a {
+	text-decoration: none;
+}
+
+div#favorite-list .ui-controlgroup-vertical .ui-controlgroup-controls .ui-btn.ui-last-child {
+    border-bottom-width: 0;
 }
