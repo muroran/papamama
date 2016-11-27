@@ -94,6 +94,7 @@ Papamamap.prototype.generate = function(mapServerListItem)
              new ol.control.ScaleLine({}), // 距離ライン定義
              new ol.control.Zoom({}),
              new ol.control.ZoomSlider({}),
+             new ol.control.Rotate({}), // ノースアップ
              new MoveCurrentLocationControl()
         ]
     });
