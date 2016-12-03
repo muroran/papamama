@@ -676,10 +676,10 @@ $('#compare-page').on('pageshow', function() {
 	content += compareBooleanDataDom("給食", nursery1["Lunch"], nursery2["Lunch"], 'あり', 'なし');
 	// その他経費
 	content += compareDataDom("その他経費", nursery1["Cost"], nursery2["Cost"]);
-	// 申込倍率
+	// 前回申込倍率
 	var competition1 = nursery1["Cost"] ? nursery1["Cost"] + '倍' : null;
 	var competition2 = nursery2["Cost"] ? nursery2["Cost"] + '倍' : null;
-	content += compareDataDom("申込倍率", competition1, competition2);
+	content += compareDataDom("前回申込倍率", competition1, competition2);
 	// 建築年月日
 	content += compareDataDom("建築年月日", dateValue(nursery1["Openingdate"]), dateValue(nursery2["Openingdate"]));
 	// 園庭広さ
