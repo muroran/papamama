@@ -58,7 +58,7 @@ var mapServerList = {
 		source: new ol.source.OSM({
 			url: "http://{a-c}.tile.thunderforest.com/transport/{z}/{x}/{y}.png",
 			attributions: [
-				ol.source.OSM.DATA_ATTRIBUTION,
+				ol.source.OSM.ATTRIBUTION,
 				new ol.Attribution({html: "Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank'>Andy Allan</a>"})
 			]
 		})
