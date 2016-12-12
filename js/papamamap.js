@@ -485,6 +485,13 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<td>' + tel + '</td>';
         content += '</tr>';
     }
+    var fax = feature.get('FAX') ? feature.get('FAX') : feature.get('FAX');
+    if (fax != null) {
+        content += '<tr>';
+        content += '<th>FAX</th>';
+        content += '<td>' + fax + '</td>';
+        content += '</tr>';
+    }
     var add1 = feature.get('住所１') ? feature.get('住所１') : feature.get('Add1');
     var add2 = feature.get('住所２') ? feature.get('住所２') : feature.get('Add2');
     if (add1 != null || add2 != null) {
