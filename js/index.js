@@ -58,7 +58,7 @@ var mapServerList = {
 		source: new ol.source.OSM({
 			url: "http://{a-c}.tile.thunderforest.com/transport/{z}/{x}/{y}.png",
 			attributions: [
-				ol.source.OSM.DATA_ATTRIBUTION,
+				ol.source.OSM.ATTRIBUTION,
 				new ol.Attribution({html: "Tiles courtesy of <a href='http://www.thunderforest.com/' target='_blank'>Andy Allan</a>"})
 			]
 		})
@@ -95,13 +95,6 @@ $(window).on("orientationchange", function() {
 
 var initialized = false;
 $('#mainPage').on('pageshow', function() {
-	// お気に入り削除時、反映のためreload
-	var deleteFlg = document.getElementById("delete-flg").value;
-	if(deleteFlg == 1) {
-		location.reload(true);
-		document.getElementById("delete-flg").value = null;
-	}
-
 	if(initialized) {
 		return;
 	}
@@ -209,7 +202,7 @@ $('#mainPage').on('pageshow', function() {
 			}
 			$addFavoriteBtn.on('click',function(){
 				favoriteStore.addFavorite(feature);
-				papamamap.updateNurseryStyle(feature);
+				papamamap.updateNurseryStyle(feature, null);
 				$addFavoriteBtn.hide();
 				$removeFavoriteBtn.show();
 
@@ -218,7 +211,7 @@ $('#mainPage').on('pageshow', function() {
 			});
 			$removeFavoriteBtn.on('click',function(){
 				favoriteStore.removeFavorite(feature);
-				papamamap.updateNurseryStyle(feature);
+				papamamap.updateNurseryStyle(feature, null);
 				$addFavoriteBtn.show();
 				$removeFavoriteBtn.hide();
 
@@ -658,6 +651,8 @@ $('#compare-page').on('pageshow', function() {
 	content += compareDataDom("定員", nursery1["Full"] ? nursery1["Full"] + '人' : null, nursery2["Full"] ? nursery2["Full"] + '人' : null);
 	// TEL
 	content += compareDataDom("TEL", nursery1["TEL"], nursery2["TEL"]);
+	// FAX
+	content += compareDataDom("FAX", nursery1["FAX"], nursery2["FAX"]);
 	// 住所
 	var adr1 = (nursery1["Add1"] || "") + (nursery1["Add2"] || "" );
 	var adr2 = (nursery2["Add1"] || "") + (nursery2["Add2"] || "" );
@@ -676,10 +671,10 @@ $('#compare-page').on('pageshow', function() {
 	content += compareBooleanDataDom("給食", nursery1["Lunch"], nursery2["Lunch"], 'あり', 'なし');
 	// その他経費
 	content += compareDataDom("その他経費", nursery1["Cost"], nursery2["Cost"]);
-	// 申込倍率
-	var competition1 = nursery1["Cost"] ? nursery1["Cost"] + '倍' : null;
-	var competition2 = nursery2["Cost"] ? nursery2["Cost"] + '倍' : null;
-	content += compareDataDom("申込倍率", competition1, competition2);
+	// 前回申込倍率
+	var competition1 = nursery1["Competition"] ? nursery1["Competition"] + '倍' : null;
+	var competition2 = nursery2["Competition"] ? nursery2["Competition"] + '倍' : null;
+	content += compareDataDom("前回申込倍率", competition1, competition2);
 	// 建築年月日
 	content += compareDataDom("建築年月日", dateValue(nursery1["Openingdate"]), dateValue(nursery2["Openingdate"]));
 	// 園庭広さ
@@ -748,9 +743,10 @@ function createFavoriteList() {
 	$deleteBtn1.click(function() {
 		delVal = $(this).attr("value");
 		delTarget = filter.getFeatureById(delVal);
+		delProperties = delTarget.properties;
 		$deleteBtn2.on('tap', function() {
 			favoriteStore.removeFavorite(delTarget);
-			document.getElementById("delete-flg").value = '1';
+			papamamap.updateNurseryStyle(delProperties, delVal);
 			createFavoriteList();
 		});
 	});
