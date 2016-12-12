@@ -94,6 +94,7 @@ Papamamap.prototype.generate = function(mapServerListItem)
              new ol.control.ScaleLine({}), // 距離ライン定義
              new ol.control.Zoom({}),
              new ol.control.ZoomSlider({}),
+             new ol.control.Rotate({}), // ノースアップ
              new MoveCurrentLocationControl()
         ]
     });
@@ -484,6 +485,13 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<td>' + tel + '</td>';
         content += '</tr>';
     }
+    var fax = feature.get('FAX') ? feature.get('FAX') : feature.get('FAX');
+    if (fax != null) {
+        content += '<tr>';
+        content += '<th>FAX</th>';
+        content += '<td>' + fax + '</td>';
+        content += '</tr>';
+    }
     var add1 = feature.get('住所１') ? feature.get('住所１') : feature.get('Add1');
     var add2 = feature.get('住所２') ? feature.get('住所２') : feature.get('Add2');
     if (add1 != null || add2 != null) {
@@ -544,7 +552,7 @@ Papamamap.prototype.getPopupContent = function(feature)
     var competition = feature.get('Competition');
     if (competition != null) {
         content += '<tr>';
-        content += '<th>申込倍率</th>';
+        content += '<th>前回申込倍率</th>';
         content += '<td>' + competition + '倍</td>';
         content += '</tr>';
     }
@@ -712,22 +720,30 @@ Papamamap.prototype.switchLayer = function(layerName, visible) {
     });
 };
 
-Papamamap.prototype.updateNurseryStyle = function(feature) {
-  var type = feature.get('種別') ? feature.get('種別') :  feature.get('Type');
-  if(type === undefined) {
-    return;
-  }
-  var overlay = this.featureOverlays[type];
-  var id = favoriteStore.getId(feature);
-
-  var features = overlay.getSource().getFeatures();
-  if (features != null && features.length > 0) {
-    for (x in features) {
-      if (id === favoriteStore.getId(features[x])) {
-        overlay.getSource().removeFeature(features[x]);
-        overlay.getSource().addFeature(features[x]);
-        break;
-      }
+Papamamap.prototype.updateNurseryStyle = function(feature, setId) {
+    var type = null;
+    var id = null;
+    if (feature.Type != null) {
+        // お気に入り一覧画面からTypeを取得する場合
+        type = feature.Type;
+        id = setId;
+    } else {
+        type = feature.get('種別') ? feature.get('種別') :  feature.get('Type');
+        id = favoriteStore.getId(feature);
     }
-  }
+    if(type === undefined) {
+        return;
+    }
+    var overlay = this.featureOverlays[type];
+
+    var features = overlay.getSource().getFeatures();
+    if (features != null && features.length > 0) {
+        for (x in features) {
+            if (id === favoriteStore.getId(features[x])) {
+                overlay.getSource().removeFeature(features[x]);
+                overlay.getSource().addFeature(features[x]);
+                break;
+            }
+        }
+    }
 }
