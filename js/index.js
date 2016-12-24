@@ -349,6 +349,9 @@ $('#mainPage').on('pageshow', function() {
 		if($('#CloseTime option:selected').val() !== "") {
 			conditions['CloseTime'] = $('#CloseTime option:selected').val();
 		}
+		if($('#EnchouHoiku').prop('checked')) {
+			conditions['EnchouHoiku'] = 1;
+		}
 		if($('#IchijiHoiku').prop('checked')) {
 			conditions['IchijiHoiku'] = 1;
 		}
@@ -609,6 +612,8 @@ $('#compare-page').on('pageshow', function() {
 	content += compareDataDom("時間", open1 + "〜" + close1, open2 + "〜" + close2);
 	// 備考
 	content += compareDataDom("備考", nursery1["Memo"], nursery2["Memo"]);
+	// 延長保育
+	content += compareBooleanDataDom("延長保育", nursery1["Extra"], nursery2["Extra"], 'あり', 'なし');
 	// 一時保育
 	content += compareBooleanDataDom("一時保育", nursery1["Temp"], nursery2["Temp"], 'あり', 'なし');
 	// 休日保育
