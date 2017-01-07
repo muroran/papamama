@@ -402,10 +402,17 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '</tr>';
     }
 
+    var extra   = feature.get('Extra');
     var temp    = feature.get('一時') ? feature.get('一時') : feature.get('Temp');
     var holiday = feature.get('休日') ? feature.get('休日') : feature.get('Holiday');
     var night   = feature.get('夜間') ? feature.get('夜間') : feature.get('Night');
     var h24     = feature.get('H24') ? feature.get('H24') : feature.get('H24');
+    if (extra != null) {
+        content += '<tr>';
+        content += '<th>延長保育</th>';
+        content += '<td>' + booleanValue(extra, 'あり', 'なし') + '</td>';
+        content += '</tr>';
+    }
     if (temp != null) {
         content += '<tr>';
         content += '<th>一時保育</th>';

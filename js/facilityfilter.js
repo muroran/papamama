@@ -70,6 +70,16 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
         };
         Features = Features.filter(filterfunc);
     }
+    // 延長保育
+    if(conditions['EnchouHoiku']) {
+        filterfunc = function (item,idx) {
+            var extra = item.properties['Extra'];
+            if(extra === 'Y') {
+                return true;
+            }
+        };
+        Features = Features.filter(filterfunc);
+    }
     // 一時保育
     if(conditions['IchijiHoiku']) {
         filterfunc = function (item,idx) {
