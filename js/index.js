@@ -200,23 +200,17 @@ $('#mainPage').on('pageshow', function() {
 				$addFavoriteBtn.show();
 				$removeFavoriteBtn.hide();
 			}
-			$addFavoriteBtn.on('click',function(){
+			$addFavoriteBtn.off('click').on('click',function(){
 				favoriteStore.addFavorite(feature);
 				papamamap.updateNurseryStyle(feature, null);
 				$addFavoriteBtn.hide();
 				$removeFavoriteBtn.show();
-
-				$addFavoriteBtn.off('click');
-				$removeFavoriteBtn.off('click');
 			});
-			$removeFavoriteBtn.on('click',function(){
+			$removeFavoriteBtn.off('click').on('click',function(){
 				favoriteStore.removeFavorite(feature);
 				papamamap.updateNurseryStyle(feature, null);
 				$addFavoriteBtn.show();
 				$removeFavoriteBtn.hide();
-
-				$addFavoriteBtn.off('click');
-				$removeFavoriteBtn.off('click');
 			});
 
 			var height = $('#popup').css('max-height', '').height();
