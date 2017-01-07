@@ -686,7 +686,7 @@ Papamamap.prototype.drawCenterCircle = function(radius, moveToPixel)
     view.fitExtent(extent, [size, size]);
 
     // 円の内部に施設が含まれるかチェック
-    _features = nurseryFacilities.features.filter(function(item,idx){
+    _features = _.filter(nurseryFacilities.features, function(item,idx){
         coordinate = ol.proj.transform(item.geometry.coordinates, 'EPSG:4326', 'EPSG:3857');
         if(ol.extent.containsCoordinate(extent, coordinate))
             return true;
