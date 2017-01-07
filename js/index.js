@@ -586,6 +586,8 @@ $('#compare-page').on('pageshow', function() {
 	}
 
 	var content = '';
+	// 種別
+	content += compareDataDom("種別", nursery1["Type"], nursery2["Type"], "nursery-type");
 	// 欠員
 	var vacancy1 = null, vacancy2 = null;
 	if (nursery1["Type"] === "認可保育所") {
@@ -601,8 +603,6 @@ $('#compare-page').on('pageshow', function() {
 		}
 	}
 	content += compareDataDom("欠員", vacancy1, vacancy2, '空きあり', '空きなし');
-	// 種別
-	content += compareDataDom("種別", nursery1["Type"], nursery2["Type"], "nursery-type");
 	// 施設種別
 	var kodomo1  = nursery1["Kodomo"] === 'Y' ? '認定こども園' : "";
 	var shanai1 = nursery1["Shanai"] === 'Y' ? '事業所内保育所' : "";
