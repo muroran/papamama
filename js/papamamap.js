@@ -372,6 +372,25 @@ Papamamap.prototype.getPopupContent = function(feature)
       return dateStr.substring(0,4) + '/' + dateStr.substring(4,6) + '/' +dateStr.substring(6,8);
     }
 
+    var type = feature.get('種別') ? feature.get('種別') : feature.get('Type');
+    var vacancy = feature.get('Vacancy');
+    if(type == "認可保育所" && vacancy != null) {
+        content += '<tr>';
+        content += '<th>欠員</th>';
+        content += '<td>';
+        if(vacancy === 'Y') {
+            content += '<a href="http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html" target="_blank">空きあり</a>';
+        }else if (vacancy === 'N'){
+            content += '<a href="http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html" target="_blank">空きなし</a>';
+        }
+        var vacancyDate = feature.get('VacancyDate');
+        if (vacancyDate != null) {
+            content += " (" + dateValue(vacancyDate) + ")";
+        }
+        content += '</td>';
+        content += '</tr>';
+    }
+
     var kodomo = feature.get('Kodomo');
     var shanai = feature.get('Shanai');
     if (kodomo === 'Y' || shanai === 'Y') {
@@ -431,7 +450,6 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '</tr>';
     }
 
-    var type = feature.get('種別') ? feature.get('種別') : feature.get('Type');
     var proof = feature.get('証明') ? feature.get('証明') : feature.get('Proof');
     // 千葉市版は証明書発行表示必要ないので、proofにnullを設定
     proof = null;
@@ -441,24 +459,6 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<th>監督基準</th>';
         content += '<td>';
         content += '証明書発行済<a href="https://www.city.chiba.jp/kodomomirai/kodomomirai/unei/ninkagai.html" target="_blank">(詳細)</a>';
-        content += '</td>';
-        content += '</tr>';
-    }
-
-    var vacancy = feature.get('Vacancy');
-    if(type == "認可保育所" && vacancy != null) {
-        content += '<tr>';
-        content += '<th>欠員</th>';
-        content += '<td>';
-        if(vacancy === 'Y') {
-            content += '<a href="http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html" target="_blank">空きあり</a>';
-        }else if (vacancy === 'N'){
-            content += '<a href="http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html" target="_blank">空きなし</a>';
-        }
-        var vacancyDate = feature.get('VacancyDate');
-        if (vacancyDate != null) {
-            content += " (" + dateValue(vacancyDate) + ")";
-        }
         content += '</td>';
         content += '</tr>';
     }
