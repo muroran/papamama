@@ -335,9 +335,9 @@ Papamamap.prototype.getPopupTitle = function(feature)
     var type = feature.get('種別') ? feature.get('種別') : feature.get('Type');
     title  = '[' + type + '] ';
     // 先取りプロジェクト or 保育ルーム
-    var sakidori_auth = feature.get('Sakidori_auth');
-    var hoikuroom_auth = feature.get('Hoikuroom_auth');
     if (type === '認可外'){
+      var sakidori_auth = feature.get('Sakidori_auth');
+      var hoikuroom_auth = feature.get('Hoikuroom_auth');
       if (sakidori_auth === 'Y') {
         title += ' [先取りプロジェクト]';
       }
