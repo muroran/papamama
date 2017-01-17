@@ -591,6 +591,21 @@ $('#compare-page').on('pageshow', function() {
 	var content = '';
 	// 種別
 	content += compareDataDom("種別", nursery1["Type"], nursery2["Type"], "nursery-type");
+	// 欠員
+	var vacancy1 = null, vacancy2 = null;
+	if (nursery1["Type"] === "認可保育所") {
+		vacancy1 = booleanValue(nursery1["Vacancy"], '空きあり', '空きなし');
+		if (nursery1["VacancyDate"] != null) {
+				vacancy1 += "<br> (" + dateValue(nursery1["VacancyDate"]) + ")";
+		}
+	}
+	if (nursery2["Type"] === "認可保育所") {
+		vacancy2 = booleanValue(nursery2["Vacancy"], '空きあり', '空きなし');
+		if (nursery2["VacancyDate"] != null) {
+				vacancy2 += "<br> (" + dateValue(nursery2["VacancyDate"]) + ")";
+		}
+	}
+	content += compareDataDom("欠員", vacancy1, vacancy2, '空きあり', '空きなし');
 	// 施設種別
 	var kodomo1  = nursery1["Kodomo"] === 'Y' ? '認定こども園' : "";
 	var shanai1 = nursery1["Shanai"] === 'Y' ? '事業所内保育所' : "";
@@ -623,21 +638,6 @@ $('#compare-page').on('pageshow', function() {
 	proof1 = null;
 	proof2 = null;
 	content += compareBooleanDataDom("監督基準", proof1, proof2, '証明書発行済み', '未発行');
-	// 欠員
-	var vacancy1 = null, vacancy2 = null;
-	if (nursery1["Type"] === "認可保育所") {
-		vacancy1 = booleanValue(nursery1["Vacancy"], '空きあり', '空きなし');
-		if (nursery1["VacancyDate"] != null) {
-				vacancy1 += "<br> (" + dateValue(nursery1["VacancyDate"]) + ")";
-		}
-	}
-	if (nursery2["Type"] === "認可保育所") {
-		vacancy2 = booleanValue(nursery2["Vacancy"], '空きあり', '空きなし');
-		if (nursery2["VacancyDate"] != null) {
-				vacancy2 += "<br> (" + dateValue(nursery2["VacancyDate"]) + ")";
-		}
-	}
-	content += compareDataDom("欠員", vacancy1, vacancy2, '空きあり', '空きなし');
 	// 年齢
 	var ageS1  = nursery1["AgeS"] || "";
 	var ageE1 = nursery1["AgeE"] || "";
