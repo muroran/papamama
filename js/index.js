@@ -593,15 +593,15 @@ $('#compare-page').on('pageshow', function() {
 	var typeValue = function(nursery) {
 		var type = nursery["Type"];
 		if (type === '認可外'){
-      var sakidori_auth = nursery['Sakidori_auth'];
-      var hoikuroom_auth = nursery['Hoikuroom_auth'];
-      if (sakidori_auth === 'Y') {
-        type += ' （先取りプロジェクト）';
-      }
-      if (hoikuroom_auth === 'Y') {
-        type += ' （保育ルーム）';
-      }
-    }
+			var sakidori_auth = nursery['Sakidori_auth'];
+			var hoikuroom_auth = nursery['Hoikuroom_auth'];
+			if (sakidori_auth === 'Y') {
+				type += ' （先取りプロジェクト）';
+			}
+			if (hoikuroom_auth === 'Y') {
+				type += ' （保育ルーム）';
+			}
+		}
 		return type;
 	};
 	content += compareDataDom("種別", typeValue(nursery1), typeValue(nursery2), "nursery-type");
