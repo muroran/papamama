@@ -336,14 +336,14 @@ Papamamap.prototype.getPopupTitle = function(feature)
     title  = '[' + type + '] ';
     // 先取りプロジェクト or 保育ルーム
     if (type === '認可外'){
-      var sakidori_auth = feature.get('Sakidori_auth');
-      var hoikuroom_auth = feature.get('Hoikuroom_auth');
-      if (sakidori_auth === 'Y') {
-        title += ' [先取りプロジェクト]';
-      }
-      if (hoikuroom_auth === 'Y') {
-        title += ' [保育ルーム]';
-      }
+        var sakidori_auth = feature.get('Sakidori_auth');
+        var hoikuroom_auth = feature.get('Hoikuroom_auth');
+        if (sakidori_auth === 'Y') {
+            title += ' [先取りプロジェクト]';
+        }
+        if (hoikuroom_auth === 'Y') {
+            title += ' [保育ルーム]';
+        }
     }
     var owner = feature.get('設置') ? feature.get('設置') : feature.get('Ownership');
     if(owner !== undefined && owner !== null && owner !== "") {
