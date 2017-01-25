@@ -331,14 +331,26 @@ Papamamap.prototype.getPopupTitle = function(feature)
 {
     // タイトル部
     var title = '';
+    // 認可 or 認可外
     var type = feature.get('種別') ? feature.get('種別') : feature.get('Type');
     title  = '[' + type + '] ';
+    // 先取りプロジェクト or 保育ルーム
+    if (type === '認可外'){
+        var sakidori_auth = feature.get('Sakidori_auth');
+        var hoikuroom_auth = feature.get('Hoikuroom_auth');
+        if (sakidori_auth === 'Y') {
+            title += ' [先取りプロジェクト]';
+        }
+        if (hoikuroom_auth === 'Y') {
+            title += ' [保育ルーム]';
+        }
+    }
     var owner = feature.get('設置') ? feature.get('設置') : feature.get('Ownership');
     if(owner !== undefined && owner !== null && owner !== "") {
         title += ' [' + owner +']';
     }
     var name = feature.get('名称') ? feature.get('名称') : feature.get('Name');
-    title += name;
+    title += '</br>' + name;
     url = feature.get('url');
     if(url !== null && url !='') {
         title = '<a href="' +url+ '" target="_blank">' + title + '</a>';
@@ -589,24 +601,6 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<tr>';
         content += '<th>プール</th>';
         content += '<td>' + pool + '</td>';
-        content += '</tr>';
-    }
-
-    var type = feature.get('種別') ? feature.get('種別') : feature.get('Type');
-    var sakidori_auth = booleanValue(feature.get('Sakidori_auth'), 'あり', 'なし');
-    var hoikuroom_auth = booleanValue(feature.get('Hoikuroom_auth'), 'あり', 'なし');
-    if (type === '認可外' && sakidori_auth != null && hoikuroom_auth != null){
-        content += '<tr>';
-        content += '<th>認可外認定</th>';
-        content += '<td>';
-        if(sakidori_auth != null){
-            content += '先取りプロジェクト認定' +  '(' + sakidori_auth + ')';
-        }
-        content += '<br />'
-        if(hoikuroom_auth != null){
-            content += '保育ルーム認定' +  '(' + hoikuroom_auth + ')';
-        }
-        content += '</td>';
         content += '</tr>';
     }
     var remarks = feature.get('Remarks');
