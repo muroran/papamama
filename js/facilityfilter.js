@@ -20,7 +20,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
 
     // 保育園,幼稚園の検索元データを取得
     var Features = [];
-    _features = nurseryFacilities.features.filter(function (item,idx) {
+    _features = _.filter(nurseryFacilities.features, function (item,idx) {
             var type = item.properties['種別'] ? item.properties['種別'] : item.properties['Type'];
             if(type == "認可保育所" || type == "認可外" || type == "幼稚園") return true;
         });
@@ -67,6 +67,16 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
                 }
             };
             return f(item,idx);
+        };
+        Features = Features.filter(filterfunc);
+    }
+    // 延長保育
+    if(conditions['EnchouHoiku']) {
+        filterfunc = function (item,idx) {
+            var extra = item.properties['Extra'];
+            if(extra === 'Y') {
+                return true;
+            }
         };
         Features = Features.filter(filterfunc);
     }
@@ -122,26 +132,6 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
         };
         Features = Features.filter(filterfunc);
     }
-    // 先取りプロジェクト認定あり
-    if(conditions['Sakidori_auth']) {
-        filterfunc = function (item,idx) {
-            var proof = item.properties['Sakidori_auth'];
-            if(proof === 'Y') {
-                return true;
-            }
-        };
-        Features = Features.filter(filterfunc);
-    }
-    // 保育ルーム認定あり
-    if(conditions['Hoikuroom_auth']) {
-        filterfunc = function (item,idx) {
-            var proof = item.properties['Hoikuroom_auth'];
-            if(proof === 'Y') {
-                return true;
-            }
-        };
-        Features = Features.filter(filterfunc);
-    }
     // 事業所内保育所
     if(conditions['Shanai']) {
         filterfunc = function (item,idx) {
@@ -177,7 +167,7 @@ FacilityFilter.prototype.getFilteredFeaturesGeoJson = function (conditions, nurs
 FacilityFilter.prototype.getFavoriteFeatures = function (nurseryFacilities){
   var favoriteList = favoriteStore.getFavoriteList();
   if (nurseryFacilities.features) {
-    return nurseryFacilities.features.filter(function (item,idx) {
+    return _.filter(nurseryFacilities.features, function (item,idx) {
       return favoriteList.indexOf(favoriteStore.getId(item)) >= 0;
     });
   } else {
@@ -191,7 +181,7 @@ FacilityFilter.prototype.getFavoriteFeatures = function (nurseryFacilities){
 FacilityFilter.prototype.getFeatureById = function(id) {
   var favoriteList = favoriteStore.getFavoriteList();
   if (nurseryFacilities.features) {
-    return nurseryFacilities.features.find(function (item,idx) {
+    return _.find(nurseryFacilities.features, function (item,idx) {
       return favoriteStore.getId(item) === id;
     });
   } else {

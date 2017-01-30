@@ -200,23 +200,17 @@ $('#mainPage').on('pageshow', function() {
 				$addFavoriteBtn.show();
 				$removeFavoriteBtn.hide();
 			}
-			$addFavoriteBtn.on('click',function(){
+			$addFavoriteBtn.off('click').on('click',function(){
 				favoriteStore.addFavorite(feature);
 				papamamap.updateNurseryStyle(feature, null);
 				$addFavoriteBtn.hide();
 				$removeFavoriteBtn.show();
-
-				$addFavoriteBtn.off('click');
-				$removeFavoriteBtn.off('click');
 			});
-			$removeFavoriteBtn.on('click',function(){
+			$removeFavoriteBtn.off('click').on('click',function(){
 				favoriteStore.removeFavorite(feature);
 				papamamap.updateNurseryStyle(feature, null);
 				$addFavoriteBtn.show();
 				$removeFavoriteBtn.hide();
-
-				$addFavoriteBtn.off('click');
-				$removeFavoriteBtn.off('click');
 			});
 
 			var height = $('#popup').css('max-height', '').height();
@@ -348,6 +342,9 @@ $('#mainPage').on('pageshow', function() {
 		}
 		if($('#CloseTime option:selected').val() !== "") {
 			conditions['CloseTime'] = $('#CloseTime option:selected').val();
+		}
+		if($('#EnchouHoiku').prop('checked')) {
+			conditions['EnchouHoiku'] = 1;
 		}
 		if($('#IchijiHoiku').prop('checked')) {
 			conditions['IchijiHoiku'] = 1;
@@ -592,38 +589,24 @@ $('#compare-page').on('pageshow', function() {
 	}
 
 	var content = '';
-	// 種別
-	content += compareDataDom("種別", nursery1["Type"], nursery2["Type"], "nursery-type");
-	// 施設種別
-	var kodomo1  = nursery1["Kodomo"] === 'Y' ? '認定こども園' : "";
-	var shanai1 = nursery1["Shanai"] === 'Y' ? '事業所内保育所' : "";
-	var kodomo2  = nursery2["Kodomo"] === 'Y' ? '認定こども園' : "";
-	var shanai2 = nursery2["Shanai"] === 'Y' ? '事業所内保育所' : "";
-	content += compareDataDom("施設種別", kodomo1+shanai1 || null, kodomo2+shanai2 || null, "nursery-type");
+	// 種別 + 先取りプロジェクト認定 + 保育ルーム認定
+	var typeValue = function(nursery) {
+		var type = nursery["Type"];
+		if (type === '認可外'){
+			var sakidori_auth = nursery['Sakidori_auth'];
+			var hoikuroom_auth = nursery['Hoikuroom_auth'];
+			if (sakidori_auth === 'Y') {
+				type += ' （先取りプロジェクト）';
+			}
+			if (hoikuroom_auth === 'Y') {
+				type += ' （保育ルーム）';
+			}
+		}
+		return type;
+	};
+	content += compareDataDom("種別", typeValue(nursery1), typeValue(nursery2), "nursery-type");
 
-	// 時間
-	var open1  = nursery1["Open"] || "";
-	var close1 = nursery1["Close"] || "";
-	var open2  = nursery2["Open"] || "";
-	var close2 = nursery2["Close"] || "";
-	content += compareDataDom("時間", open1 + "〜" + close1, open2 + "〜" + close2);
-	// 備考
-	content += compareDataDom("備考", nursery1["Memo"], nursery2["Memo"]);
-	// 一時保育
-	content += compareBooleanDataDom("一時保育", nursery1["Temp"], nursery2["Temp"], 'あり', 'なし');
-	// 休日保育
-	content += compareBooleanDataDom("休日保育", nursery1["Holiday"], nursery2["Holiday"], 'あり', 'なし');
-	// 夜間保育
-	content += compareBooleanDataDom("夜間保育", nursery1["Night"], nursery2["Night"], 'あり', 'なし');
-	// 24時間
-	content += compareBooleanDataDom("24時間", nursery1["H24"], nursery2["H24"], '対応', '未対応');
-  // 監督基準
-	var proof1 = nursery1["Type"] === "認可外" ? nursery1["Proof"] : null;
-	var proof2 = nursery2["Type"] === "認可外" ? nursery2["Proof"] : null;
-	// 千葉市版は証明書発行表示必要ないので、proof1,2にnullを設定
-	proof1 = null;
-	proof2 = null;
-	content += compareBooleanDataDom("監督基準", proof1, proof2, '証明書発行済み', '未発行');
+
 	// 欠員
 	var vacancy1 = null, vacancy2 = null;
 	if (nursery1["Type"] === "認可保育所") {
@@ -639,6 +622,38 @@ $('#compare-page').on('pageshow', function() {
 		}
 	}
 	content += compareDataDom("欠員", vacancy1, vacancy2, '空きあり', '空きなし');
+	// 施設種別
+	var kodomo1  = nursery1["Kodomo"] === 'Y' ? '認定こども園' : "";
+	var shanai1 = nursery1["Shanai"] === 'Y' ? '事業所内保育所' : "";
+	var kodomo2  = nursery2["Kodomo"] === 'Y' ? '認定こども園' : "";
+	var shanai2 = nursery2["Shanai"] === 'Y' ? '事業所内保育所' : "";
+	content += compareDataDom("施設種別", kodomo1+shanai1 || null, kodomo2+shanai2 || null, "nursery-type");
+
+	// 時間
+	var open1  = nursery1["Open"] || "";
+	var close1 = nursery1["Close"] || "";
+	var open2  = nursery2["Open"] || "";
+	var close2 = nursery2["Close"] || "";
+	content += compareDataDom("時間", open1 + "〜" + close1, open2 + "〜" + close2);
+	// 備考
+	content += compareDataDom("備考", nursery1["Memo"], nursery2["Memo"]);
+	// 延長保育
+	content += compareBooleanDataDom("延長保育", nursery1["Extra"], nursery2["Extra"], 'あり', 'なし');
+	// 一時保育
+	content += compareBooleanDataDom("一時保育", nursery1["Temp"], nursery2["Temp"], 'あり', 'なし');
+	// 休日保育
+	content += compareBooleanDataDom("休日保育", nursery1["Holiday"], nursery2["Holiday"], 'あり', 'なし');
+	// 夜間保育
+	content += compareBooleanDataDom("夜間保育", nursery1["Night"], nursery2["Night"], 'あり', 'なし');
+	// 24時間
+	content += compareBooleanDataDom("24時間", nursery1["H24"], nursery2["H24"], '対応', '未対応');
+  // 監督基準
+	var proof1 = nursery1["Type"] === "認可外" ? nursery1["Proof"] : null;
+	var proof2 = nursery2["Type"] === "認可外" ? nursery2["Proof"] : null;
+	// 千葉市版は証明書発行表示必要ないので、proof1,2にnullを設定
+	proof1 = null;
+	proof2 = null;
+	content += compareBooleanDataDom("監督基準", proof1, proof2, '証明書発行済み', '未発行');
 	// 年齢
 	var ageS1  = nursery1["AgeS"] || "";
 	var ageE1 = nursery1["AgeE"] || "";
@@ -687,12 +702,6 @@ $('#compare-page').on('pageshow', function() {
 	content += compareDataDom("保育室広さ", playroom1, playroom2);
 	// プール
 	content += compareBooleanDataDom("プール", nursery1["Pool"], nursery2["Pool"], 'あり', 'なし');
-	if(nursery1['Type'] === '認可外' && nursery2['Type'] === '認可外') {
-		// 先取りプロジェクト認定
-		content += compareBooleanDataDom("先取りプロジェクト認定", nursery1["Sakidori_auth"], nursery2["Sakidori_auth"], 'あり', 'なし');
-		// 保育ルーム認定
-		content += compareBooleanDataDom("保育ルーム認定", nursery1["Hoikuroom_auth"], nursery2["Hoikuroom_auth"], 'あり', 'なし');
-	}
 	// 備考
 	content += compareDataDom("備考", nursery1["Remarks"], nursery2["Remarks"]);
 

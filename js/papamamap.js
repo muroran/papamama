@@ -331,14 +331,26 @@ Papamamap.prototype.getPopupTitle = function(feature)
 {
     // タイトル部
     var title = '';
+    // 認可 or 認可外
     var type = feature.get('種別') ? feature.get('種別') : feature.get('Type');
     title  = '[' + type + '] ';
+    // 先取りプロジェクト or 保育ルーム
+    if (type === '認可外'){
+        var sakidori_auth = feature.get('Sakidori_auth');
+        var hoikuroom_auth = feature.get('Hoikuroom_auth');
+        if (sakidori_auth === 'Y') {
+            title += ' [先取りプロジェクト]';
+        }
+        if (hoikuroom_auth === 'Y') {
+            title += ' [保育ルーム]';
+        }
+    }
     var owner = feature.get('設置') ? feature.get('設置') : feature.get('Ownership');
     if(owner !== undefined && owner !== null && owner !== "") {
         title += ' [' + owner +']';
     }
     var name = feature.get('名称') ? feature.get('名称') : feature.get('Name');
-    title += name;
+    title += '</br>' + name;
     url = feature.get('url');
     if(url !== null && url !='') {
         title = '<a href="' +url+ '" target="_blank">' + title + '</a>';
@@ -372,6 +384,25 @@ Papamamap.prototype.getPopupContent = function(feature)
       return dateStr.substring(0,4) + '/' + dateStr.substring(4,6) + '/' +dateStr.substring(6,8);
     }
 
+    var type = feature.get('種別') ? feature.get('種別') : feature.get('Type');
+    var vacancy = feature.get('Vacancy');
+    if(type == "認可保育所" && vacancy != null) {
+        content += '<tr>';
+        content += '<th>欠員</th>';
+        content += '<td>';
+        if(vacancy === 'Y') {
+            content += '<a href="http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html" target="_blank">空きあり</a>';
+        }else if (vacancy === 'N'){
+            content += '<a href="http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html" target="_blank">空きなし</a>';
+        }
+        var vacancyDate = feature.get('VacancyDate');
+        if (vacancyDate != null) {
+            content += " (" + dateValue(vacancyDate) + ")";
+        }
+        content += '</td>';
+        content += '</tr>';
+    }
+
     var kodomo = feature.get('Kodomo');
     var shanai = feature.get('Shanai');
     if (kodomo === 'Y' || shanai === 'Y') {
@@ -402,10 +433,17 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '</tr>';
     }
 
+    var extra   = feature.get('Extra');
     var temp    = feature.get('一時') ? feature.get('一時') : feature.get('Temp');
     var holiday = feature.get('休日') ? feature.get('休日') : feature.get('Holiday');
     var night   = feature.get('夜間') ? feature.get('夜間') : feature.get('Night');
     var h24     = feature.get('H24') ? feature.get('H24') : feature.get('H24');
+    if (extra != null) {
+        content += '<tr>';
+        content += '<th>延長保育</th>';
+        content += '<td>' + booleanValue(extra, 'あり', 'なし') + '</td>';
+        content += '</tr>';
+    }
     if (temp != null) {
         content += '<tr>';
         content += '<th>一時保育</th>';
@@ -431,7 +469,6 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '</tr>';
     }
 
-    var type = feature.get('種別') ? feature.get('種別') : feature.get('Type');
     var proof = feature.get('証明') ? feature.get('証明') : feature.get('Proof');
     // 千葉市版は証明書発行表示必要ないので、proofにnullを設定
     proof = null;
@@ -441,24 +478,6 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<th>監督基準</th>';
         content += '<td>';
         content += '証明書発行済<a href="https://www.city.chiba.jp/kodomomirai/kodomomirai/unei/ninkagai.html" target="_blank">(詳細)</a>';
-        content += '</td>';
-        content += '</tr>';
-    }
-
-    var vacancy = feature.get('Vacancy');
-    if(type == "認可保育所" && vacancy != null) {
-        content += '<tr>';
-        content += '<th>欠員</th>';
-        content += '<td>';
-        if(vacancy === 'Y') {
-            content += '<a href="http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html" target="_blank">空きあり</a>';
-        }else if (vacancy === 'N'){
-            content += '<a href="http://www.city.chiba.jp/kodomomirai/kodomomirai/unei/akizyoukyou.html" target="_blank">空きなし</a>';
-        }
-        var vacancyDate = feature.get('VacancyDate');
-        if (vacancyDate != null) {
-            content += " (" + dateValue(vacancyDate) + ")";
-        }
         content += '</td>';
         content += '</tr>';
     }
@@ -584,24 +603,6 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<td>' + pool + '</td>';
         content += '</tr>';
     }
-
-    var type = feature.get('種別') ? feature.get('種別') : feature.get('Type');
-    var sakidori_auth = booleanValue(feature.get('Sakidori_auth'), 'あり', 'なし');
-    var hoikuroom_auth = booleanValue(feature.get('Hoikuroom_auth'), 'あり', 'なし');
-    if (type === '認可外' && sakidori_auth != null && hoikuroom_auth != null){
-        content += '<tr>';
-        content += '<th>認可外認定</th>';
-        content += '<td>';
-        if(sakidori_auth != null){
-            content += '先取りプロジェクト認定' +  '(' + sakidori_auth + ')';
-        }
-        content += '<br />'
-        if(hoikuroom_auth != null){
-            content += '保育ルーム認定' +  '(' + hoikuroom_auth + ')';
-        }
-        content += '</td>';
-        content += '</tr>';
-    }
     var remarks = feature.get('Remarks');
     if (remarks != null) {
         content += '<tr>';
@@ -679,7 +680,7 @@ Papamamap.prototype.drawCenterCircle = function(radius, moveToPixel)
     view.fitExtent(extent, [size, size]);
 
     // 円の内部に施設が含まれるかチェック
-    _features = nurseryFacilities.features.filter(function(item,idx){
+    _features = _.filter(nurseryFacilities.features, function(item,idx){
         coordinate = ol.proj.transform(item.geometry.coordinates, 'EPSG:4326', 'EPSG:3857');
         if(ol.extent.containsCoordinate(extent, coordinate))
             return true;
