@@ -554,7 +554,7 @@ Papamamap.prototype.getPopupContent = function(feature)
         content += '<td>' + smock + '</td>';
         content += '</tr>';
     }
-    var lunch = booleanValue(feature.get('Lunch'), 'あり', 'なし');
+    var lunch = booleanValue(feature.get('Lunch'), 'あり (年齢により、ない場合もあり)', 'なし');
     if (lunch != null) {
         content += '<tr>';
         content += '<th>給食</th>';
@@ -571,8 +571,8 @@ Papamamap.prototype.getPopupContent = function(feature)
     var competition = feature.get('Competition');
     if (competition != null) {
         content += '<tr>';
-        content += '<th>前回申込倍率</th>';
-        content += '<td>' + competition + '倍</td>';
+        content += '<th>申込倍率</th>';
+        content += '<td>' + competition + '倍 (2016年4月入園時)</td>';
         content += '</tr>';
     }
     var openingdate = feature.get('Openingdate');
