@@ -118,10 +118,13 @@ $('#mainPage').on('pageshow', function() {
 	map.addOverlay(popup);
 
 	// 背景地図一覧リストを設定する
+	option = null;
+	option = $('<optgroup>').attr('label', "背景地図");
 	for(var item in mapServerList) {
-		option = $('<option>').html(mapServerList[item].label).val(item);
-		$('#changeBaseMap').append(option);
+		option.append($('<option>').html(mapServerList[item].label).val(item));
 	}
+	$('#changeBaseMap').append(option);
+	$('#changeBaseMap').selectmenu('refresh');
 
 	// 最寄駅セレクトボックスの生成
 	mtl = new MoveToList();
