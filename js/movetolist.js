@@ -12,7 +12,6 @@ MoveToList.prototype.loadStationJson = function()
     $.getJSON(
         "data/station.geojson",
         function(data){
-            moveToList.push( {name: "公共交通機関施設", header:true} );
             var lineName = "";
             for(var i=0; i<data.features.length; i++) {
                 _s = data.features[i].properties["shubetsu"] + " (" + data.features[i].properties["line"] + ")";
@@ -56,4 +55,5 @@ MoveToList.prototype.appendToMoveToListBox = function(moveToList)
     if(nesting !== "") {
         $('#moveTo').append(nesting);
     }
+    $('#moveTo').selectmenu('refresh');
 };
