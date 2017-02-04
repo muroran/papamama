@@ -71,10 +71,7 @@
 
                     <a class="typeform-share link ui-btn ui-icon-heart ui-btn-icon-right" href="https://codeforchiba.typeform.com/to/ozCQwu" data-mode="1" target="_blank">フィードバックする</a>
 
-                    <a id="btnHelp" href="https://github.com/codeforchiba/papamama" target="_blank" class="ui-btn ui-icon-question ui-btn-icon-notext">help</a>
-                    <!--
-                    <a id="btnHelp" href="#helpDialog" data-rel="popup" data-position-to="window" class="ui-btn ui-icon-question ui-btn-icon-notext">help</a>
-                    -->
+                    <a id="btnHelp" href="#helpDialog" data-rel="popup" data-position-to="window" data-transition="pop" class="ui-btn ui-icon-question ui-btn-icon-notext">help</a>
                 </fieldset>
             </div>
             <div id="map" class="map"></div>
@@ -148,22 +145,248 @@
                 </div>
             </form>
         </div>
+
         <div data-role="popup" data-history="false" id="helpDialog" data-theme="a" class="ui-corner-all ui-icon-delete ui-btn-left">
             <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a>
-            <div style="padding:10px 20px;">
-                <h3>ちば保育園マップ</h3>
-                <fieldset>
-                    <p>
-                    v1.0 (rev.20141130)
-                    </p>
-                    <a href="http://www.codeforsapporo.org/papamama/" target="_blank">詳しくはこちら</a>
-                </fieldset>
-                <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true">
-                    <p>
-                    (C) 2014 <a href="http://www.codeforsapporo.org/" target="_blank">Code for Sapporo.</a>
-                    </p>
-                    <a href="#" data-rel="back" id="helpClose" class="ui-btn ui-corner-all ui-btn-a ui-btn-icon-left ui-icon-check">閉じる</a>
-                </fieldset>
+            <div data-role="header" data-theme="a">千葉市保育園マップについて</div>
+            <div data-role="main" class="main">
+              <section>
+                保育園（認可保育所、認可外保育所）、幼稚園を地図に表示をしました。<br><br>
+  少子化と言われている昨今において、未就学児をお持ちの親御さんには、「子どもを正しく育てる」「安心して仕事ができる」ようにお子様に合った保育施設を選択していただきたいと思います。
+  実際に保育施設を選ぶ際には 入所選考基準だけでなく、所在地や費用などいろいろな情報を元に候補をピックアップし、実際に足を運んで見学をしたうえで決定をするのが一般的です。
+  千葉保育園マップは<span class="strong">「見学に行く保育施設を見つける」</span>ことを目標に開発をしました。
+              </section>
+              <section>
+                <header>
+                  <h3>保育園マップメニュー</h3>
+                </header>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-4">
+                    <img class="sample-image" src="image/tutolial/main-image.png" alt="メイン画像">
+                  </div>
+                  <div class="col-xs-12 col-sm-8">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>項目</th>
+                          <th>説明</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th>認可</th>
+                          <td>認可保育所を表示/非表示にします。</td>
+                        </tr>
+                        <tr>
+                          <th>認可外</th>
+                          <td>認可外保育所を表示/非表示にします。</td>
+                        </tr>
+                        <tr>
+                          <th>幼</th>
+                          <td>幼稚園を表示/非表示にします。</td>
+                        </tr>
+                        <tr>
+                          <th>小</th>
+                          <td>小学校と小学校の学区を表示/非表示にします。</td>
+                        </tr>
+                        <tr>
+                          <th>中</th>
+                          <td>中学校と中学校の学区を表示/非表示にします。</td>
+                        </tr>
+                        <tr>
+                          <th>検索</th>
+                          <td>保育施設の条件を絞り込んで検索することができます。</td>
+                        </tr>
+                        <tr>
+                          <th>背景地図</th>
+                          <td>背景の地図を選択することができます。</td>
+                        </tr>
+                        <tr>
+                          <th>最寄駅</th>
+                          <td>指定したJR・私鉄の駅を地図上の中心に表示します。</td>
+                        </tr>
+                        <tr>
+                          <th>円表示</th>
+                          <td>指定した距離を半径とする円を地図上に表示することができます。</td>
+                        </tr>
+                        <tr>
+                          <th class="normal">フィードバックする</th>
+                          <td>「千葉市保育園マップ」について意見を入力できます。</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <ul class="list-inline">
+                      <li>
+                        <img src="image/tutolial/ninka.png" alt="認可" class="icon">認可保育園
+                      </li>
+                      <li>
+                        <img src="image/tutolial/ninkagai.png" alt="認可外" class="icon">認可外保育園
+                      </li>
+                      <li>
+                        <img src="image/tutolial/youchien.png" alt="幼稚園" class="icon">幼稚園
+                      </li>
+                      <li>
+                        <img src="image/tutolial/favorite.png" alt="お気に入り登録時" class="icon">お気に入り登録時
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </section>
+              <section>
+                <header>
+                  <h3>絞り込み検索</h3>
+                </header>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-4">
+                    <img class="sample-image" src="image/tutolial/search.png" alt="メイン画像">
+                  </div>
+                  <div class="col-xs-12 col-sm-8">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>項目</th>
+                          <th>説明</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <th>開園</th>
+                          <td>開園する時間を指定します。</td>
+                        </tr>
+                        <tr>
+                          <th>終園</th>
+                          <td>終園する時間を指定します。</td>
+                        </tr>
+                        <tr>
+                          <th>24時間</th>
+                          <td>24時間保育をしている保育所を指定します。</td>
+                        </tr>
+                        <tr>
+                          <th>一時保育</th>
+                          <td>一時保育をしている保育所を指定します。</td>
+                        </tr>
+                        <tr>
+                          <th>夜間</th>
+                          <td>夜間保育をしている保育所を指定します。</td>
+                        </tr>
+                        <tr>
+                          <th class="normal">先取りプロジェクト認定</th>
+                          <td>「先取りプロジェクト」認定を受けている認可外保育所を指定します。</td>
+                        </tr>
+                        <tr>
+                          <th class="normal">保育ルーム認定</th>
+                          <td>「保育ルーム」認定を受けている認可外保育所を指定します。</td>
+                        </tr>
+                        <tr>
+                          <th>こども園</th>
+                          <td>「認定こども園」を指定します。<br>※認定こども園は保育園の一形態として扱います。</td>
+                        </tr>
+                        <tr>
+                          <th class="normal">事業所内保育所</th>
+                          <td>「事業所内保育所」を指定します。</td>
+                        </tr>
+                        <tr>
+                          <th>空きあり</th>
+                          <td>現在、空きのある保育所を指定します。<br>※データが最新でない可能性があるため試用版とします。</td>
+                        </tr>
+                        <tr>
+                          <th>条件適用</th>
+                          <td>絞り込み条件を適用して検索をします。</td>
+                        </tr>
+                        <tr>
+                          <th>リセット</th>
+                          <td>絞り込み条件をリセットします。</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </section>
+              <section>
+                <header>
+                  <h3>絞り込み検索</h3>
+                </header>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-4">
+                    <img class="sample-image" src="image/tutolial/background.png" alt="背景画像">
+                    <div>
+                      地図（Bing）／国土地理院／電車（OSM）／航空写真（Bing）から選択ができます。
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-4">
+                    <img class="sample-image" src="image/tutolial/station.png" alt="駅画像">
+                    <div>
+                      JR・私鉄の駅を指定すると、地図上にその駅が表示され駅が中心になります。
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-4">
+                    <img class="sample-image" src="image/tutolial/circle.png" alt="円表示画像">
+                    <div>
+                      距離を指定すると、その距離を半径とする円が表示されます。
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <section class="compare">
+                <header>
+                  <h3>お気に入り・比較</h3>
+                </header>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-3">
+                    <img class="sample-image" src="image/tutolial/compare-step1.png" alt="背景画像">
+                    <div>
+                      地図上の保育所をタップしポップアップから「お気に入り登録する」を選択します。
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-3">
+                    <img class="sample-image" src="image/tutolial/compare-step2.png" alt="駅画像">
+                    <div>
+                      メニューの「お気に入り」を選択するとお気に入りの一覧が表示されます。
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-3">
+                    <img class="sample-image" src="image/tutolial/compare-step3.png" alt="円表示画像">
+                    <div>
+                      比較したい保育所を2ヶ所選択をします。
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-sm-3">
+                    <img class="sample-image" src="image/tutolial/compare-step4.png" alt="円表示画像">
+                    <div>
+                      選択した保育所の詳細情報を比較することができます。
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <section>
+                <header>
+                  <h3>フィードバック</h3>
+                </header>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-4">
+                    <img class="sample-image" src="image/tutolial/feedback.png" alt="フィードバック">
+                  </div>
+                  <div class="col-xs-12 col-sm-8">
+                    メニューから「フィードバックする」を選択すると別画面にアンケートフォームが表示されます。<br>
+全部で9問ありますが、今後のサービス改善のためにご意見をいただきますようお願いいたします。
+                  </div>
+                </div>
+              </section>
+              <section>
+                <header>
+                  <h3>ご利用上のご注意</h3>
+                </header>
+                <div>
+                  「千葉市保育園マップ」は、千葉市が提供するオープンデータを元に、Code for Chibaが提供しています。<br>
+保育所などのデータについては千葉市の職員の方々、サービスはCode for Chibaのメンバーが極力間違いがないようにしておりますが、瑕疵（かし）やバグがないことは保証しておりません。<br>
+もしデータの間違いやバグなどにお気づきの際はメニューの「フィードバックする」からお伝えいただけると幸いです。<br>
+また、利用者の方々にはあらかじめ通知することなくサービスの内容や仕様を変更したり、提供を停止したり中止したりする場合がありますがご了承ください。<br>
+<br>
+「千葉市保育園マップ」は、Code for Sapporo の開発したさっぽろ保育園マップを母体として開発されました。<br>
+<br>
+<a href="https://github.com/codeforchiba/papamama" target="_blank">詳しくはこちら</a>
+                </div>
+              </section>
             </div>
         </div>
 </div>
