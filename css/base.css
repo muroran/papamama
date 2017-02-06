@@ -259,3 +259,76 @@ div#favorite-list div#popupBasic-popup div#popupBasic ul li a {
 div#favorite-list .ui-controlgroup-vertical .ui-controlgroup-controls .ui-btn.ui-last-child {
     border-bottom-width: 0;
 }
+
+/* 説明ページ */
+#helpDialog {
+}
+
+#helpDialog .main {
+	overflow-y: scroll;
+}
+
+#helpDialog section{
+	padding: 5px;
+}
+
+#helpDialog section header{
+	border-left: 5px solid rgba(3,98,160,1);
+	border-bottom: 1px solid rgba(3,98,160,1);
+	margin-bottom: 0.5em;
+	margin-top: 1em;
+}
+
+#helpDialog section header h3{
+	margin: 5px 10px;
+}
+
+#helpDialog .strong {
+	font-weight: bold;
+	color: #f00;
+}
+
+#helpDialog .sample-image {
+	width: 100%;
+  max-width: 354px;
+}
+
+#helpDialog .table th {
+	white-space: nowrap;
+}
+
+#helpDialog .table th.normal {
+	white-space: normal;;
+}
+
+#helpDialog img.icon {
+	width: 35px;
+}
+
+#helpDialog .compare .row > div:not(:last-child):after {
+	position: absolute;
+	top: 150px;
+	left: 100%;
+	font-family: 'Glyphicons Halflings';
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	content: "\e092";
+	font-size: 30px;
+  margin-left: -15px;
+	color: rgba(223,107,34,1);
+}
+
+@media (max-width: 767px) {
+	#helpDialog .compare .row > div:not(:last-child) {
+		margin-bottom: 30px;
+	}
+	#helpDialog .compare .row > div:not(:last-child):after {
+		top: 100%;
+		left: 50%;
+		content: "\e094";
+		margin-left: -15px;
+	}
+}

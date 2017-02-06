@@ -503,6 +503,10 @@ $('#mainPage').on('pageshow', function() {
 		return;
 	}
 
+  // 説明ページの表示
+	var windowHeight = $(window).height();
+	$("#helpDialog").find(".main").height(windowHeight * 0.9);
+	$("#btnHelp").click();
 });
 
 /**
