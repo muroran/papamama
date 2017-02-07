@@ -118,10 +118,13 @@ $('#mainPage').on('pageshow', function() {
 	map.addOverlay(popup);
 
 	// 背景地図一覧リストを設定する
+	option = null;
+	option = $('<optgroup>').attr('label', "背景地図");
 	for(var item in mapServerList) {
-		option = $('<option>').html(mapServerList[item].label).val(item);
-		$('#changeBaseMap').append(option);
+		option.append($('<option>').html(mapServerList[item].label).val(item));
 	}
+	$('#changeBaseMap').append(option);
+	$('#changeBaseMap').selectmenu('refresh');
 
 	// 最寄駅セレクトボックスの生成
 	mtl = new MoveToList();
@@ -222,19 +225,22 @@ $('#mainPage').on('pageshow', function() {
 
 	// 中心座標変更セレクトボックス操作イベント定義
 	$('#moveTo').change(function(){
-		// $('#markerTitle').hide();
-		// $('#marker').hide();
+		var selectVal = $("#moveTo").val();
+		if ( selectVal == '駅表示なし' ) {
+			$('#markerTitle').hide();
+			$('#marker').hide();
+		} else {
+			// 指定した最寄り駅に移動
+			papamamap.moveToSelectItem(moveToList[$(this).val()]);
 
-		// 指定した最寄り駅に移動
-		papamamap.moveToSelectItem(moveToList[$(this).val()]);
-
-		// 地図上にマーカーを設定する
-		var lon = moveToList[$(this).val()].lon;
-		var lat = moveToList[$(this).val()].lat;
-		var label = moveToList[$(this).val()].name;
-		var pos = ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
-		// Vienna marker
-		drawMarker(pos, label);
+			// 地図上にマーカーを設定する
+			var lon = moveToList[$(this).val()].lon;
+			var lat = moveToList[$(this).val()].lat;
+			var label = moveToList[$(this).val()].name;
+			var pos = ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857');
+			// Vienna marker
+			drawMarker(pos, label);
+		}
 	});
 
 	// 幼稚園チェックボックスのイベント設定
@@ -503,6 +509,10 @@ $('#mainPage').on('pageshow', function() {
 		return;
 	}
 
+  // 説明ページの表示
+	var windowHeight = $(window).height();
+	$("#helpDialog").find(".main").height(windowHeight * 0.9);
+	$("#btnHelp").click();
 });
 
 /**
@@ -683,13 +693,13 @@ $('#compare-page').on('pageshow', function() {
 	// スモック
 	content += compareBooleanDataDom("スモック", nursery1["Smock"], nursery2["Smock"], 'あり', 'なし');
 	// 給食
-	content += compareBooleanDataDom("給食", nursery1["Lunch"], nursery2["Lunch"], 'あり', 'なし');
+	content += compareBooleanDataDom("給食", nursery1["Lunch"], nursery2["Lunch"], 'あり<br>(年齢により、ない場合もあり)', 'なし');
 	// その他経費
 	content += compareDataDom("その他経費", nursery1["Cost"], nursery2["Cost"]);
 	// 前回申込倍率
-	var competition1 = nursery1["Competition"] ? nursery1["Competition"] + '倍' : null;
-	var competition2 = nursery2["Competition"] ? nursery2["Competition"] + '倍' : null;
-	content += compareDataDom("前回申込倍率", competition1, competition2);
+	var competition1 = nursery1["Competition"] ? nursery1["Competition"] + '倍<br>(2016年4月入園時)' : null;
+	var competition2 = nursery2["Competition"] ? nursery2["Competition"] + '倍<br>(2016年4月入園時)' : null;
+	content += compareDataDom("申込倍率", competition1, competition2);
 	// 建築年月日
 	content += compareDataDom("建築年月日", dateValue(nursery1["Openingdate"]), dateValue(nursery2["Openingdate"]));
 	// 園庭広さ
