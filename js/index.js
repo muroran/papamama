@@ -510,9 +510,14 @@ $('#mainPage').on('pageshow', function() {
 	}
 
   // 説明ページの表示
-	var windowHeight = $(window).height();
-	$("#helpDialog").find(".main").height(windowHeight * 0.9);
-	$("#btnHelp").click();
+	var access_count;
+	access_count = localStorage.access_count;
+	if ( access_count == null ) {
+		var windowHeight = $(window).height();
+		$("#helpDialog").find(".main").height(windowHeight * 0.9);
+		$("#btnHelp").click();
+		localStorage.access_count = 1;
+	}
 });
 
 /**
