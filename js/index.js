@@ -510,11 +510,11 @@ $('#mainPage').on('pageshow', function() {
 	}
 
   // 説明ページの表示
-	var access_count;
-	access_count = localStorage.access_count;
-	if ( access_count == null ) {
-		var windowHeight = $(window).height();
-		$("#helpDialog").find(".main").height(windowHeight * 0.9);
+	var visited;
+	var windowHeight = $(window).height();
+	visited = localStorage.access_count;
+	$("#helpDialog").find(".main").height(windowHeight * 0.9);
+	if ( visited == null ) {
 		$("#btnHelp").click();
 		localStorage.access_count = 1;
 	}
