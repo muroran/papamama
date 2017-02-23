@@ -1,8 +1,12 @@
-{"type":"GeometryCollection","geometries":[
-{"type":"Point","coordinates":[140.990073,42.370094]},
-{"type":"Point","coordinates":[141.020682,42.359068]},
-{"type":"Point","coordinates":[140.992298,42.307793]},
-{"type":"Point","coordinates":[141.031153,42.370401]},
-{"type":"Point","coordinates":[140.939215,42.375704]},
-{"type":"Point","coordinates":[141.022094,42.338786]}
-]}
+{
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::4612" } },
+"features": [
+{ "type": "Feature", "properties": { "P29_001": "01205", "P29_002": "16", "P29_003": "16002", "P29_004": "16002", "P29_005": "�`�k���w�Z", "P29_006": "���ؒ�361-1", "P29_007": 3.0 }, "geometry": { "type": "Point", "coordinates": [ 140.990073, 42.370094 ] } },
+{ "type": "Feature", "properties": { "P29_001": "01205", "P29_002": "16", "P29_003": "16002", "P29_004": "16002", "P29_005": "����w�Z", "P29_006": "�m���ʒ�1-11-30", "P29_007": 3.0 }, "geometry": { "type": "Point", "coordinates": [ 141.020682, 42.359068 ] } },
+{ "type": "Feature", "properties": { "P29_001": "01205", "P29_002": "16", "P29_003": "16002", "P29_004": "16002", "P29_005": "�������w�Z", "P29_006": "�����쒬1-32-22", "P29_007": 3.0 }, "geometry": { "type": "Point", "coordinates": [ 140.992298, 42.307793 ] } },
+{ "type": "Feature", "properties": { "P29_001": "01205", "P29_002": "16", "P29_003": "16002", "P29_004": "16002", "P29_005": "�������w�Z", "P29_006": "������4-9-1", "P29_007": 3.0 }, "geometry": { "type": "Point", "coordinates": [ 141.031153, 42.370401 ] } },
+{ "type": "Feature", "properties": { "P29_001": "01205", "P29_002": "16", "P29_003": "16002", "P29_004": "16002", "P29_005": "�{�������w�Z", "P29_006": "������2-5-1", "P29_007": 3.0 }, "geometry": { "type": "Point", "coordinates": [ 140.939215, 42.375704 ] } },
+{ "type": "Feature", "properties": { "P29_001": "01205", "P29_002": "16", "P29_003": "99999", "P29_004": "16002", "P29_005": "�ėz���w�Z", "P29_006": "����5-11-1", "P29_007": 3.0 }, "geometry": { "type": "Point", "coordinates": [ 141.022094, 42.338786 ] } }
+]
+}
