@@ -1,3 +1,7 @@
+select {
+	color: #000;
+}
+
 /* CSS Document */
 #mainPage .ui-content {
 	margin: 0;
@@ -211,4 +215,124 @@ table.nursery-compare tbody tr.nursery-type td {
 
 table.nursery-compare tbody td {
 	width: 50%;
+}
+
+
+/* お気に入り削除 */
+div#favorite-list div.ui-controlgroup-controls div.ui-checkbox {
+	display:table;
+	width: 100%;
+}
+
+div#favorite-list div.ui-controlgroup-controls div.ui-checkbox div.delete-favorite-left {
+	display:table-cell;
+	width: 95%;
+	background-color: #f6f6f6;
+	border-bottom: 1px solid #ddd;
+}
+
+div#favorite-list div.ui-controlgroup-controls div.ui-checkbox div.delete-favorite-right {
+	display:table-cell;
+	width: 5%;
+	background-color: #f6f6f6;
+	border-bottom: 1px solid #ddd;
+}
+
+div#favorite-list div.ui-controlgroup-controls div.ui-checkbox div.delete-favorite-left label {
+	margin-bottom: 1px;
+	border: 0px;
+}
+
+div#favorite-list div.ui-controlgroup-controls div.ui-checkbox div.delete-favorite-right a {
+	border-style: none;
+}
+
+div#favorite-list div#popupBasic-popup div#popupBasic {
+	padding: 5%;
+}
+
+div#favorite-list div#popupBasic-popup div#popupBasic ul li {
+	display: inline-block;
+	width: 40%;
+}
+
+div#favorite-list div#popupBasic-popup div#popupBasic ul li a {
+	text-decoration: none;
+}
+
+div#favorite-list .ui-controlgroup-vertical .ui-controlgroup-controls .ui-btn.ui-last-child {
+    border-bottom-width: 0;
+}
+
+/* 説明ページ */
+#helpDialog {
+}
+
+#helpDialog .main {
+	overflow-y: scroll;
+}
+
+#helpDialog section{
+	padding: 5px;
+}
+
+#helpDialog section header{
+	border-left: 5px solid rgba(3,98,160,1);
+	border-bottom: 1px solid rgba(3,98,160,1);
+	margin-bottom: 0.5em;
+	margin-top: 1em;
+}
+
+#helpDialog section header h3{
+	margin: 5px 10px;
+}
+
+#helpDialog .strong {
+	font-weight: bold;
+	color: #f00;
+}
+
+#helpDialog .sample-image {
+	width: 100%;
+  max-width: 354px;
+}
+
+#helpDialog .table th {
+	white-space: nowrap;
+}
+
+#helpDialog .table th.normal {
+	white-space: normal;;
+}
+
+#helpDialog img.icon {
+	width: 35px;
+}
+
+#helpDialog .compare .row > div:not(:last-child):after {
+	position: absolute;
+	top: 150px;
+	left: 100%;
+	font-family: 'Glyphicons Halflings';
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	content: "\e092";
+	font-size: 30px;
+  margin-left: -15px;
+	color: rgba(223,107,34,1);
+}
+
+@media (max-width: 767px) {
+	#helpDialog .compare .row > div:not(:last-child) {
+		margin-bottom: 30px;
+	}
+	#helpDialog .compare .row > div:not(:last-child):after {
+		top: 100%;
+		left: 50%;
+		content: "\e094";
+		margin-left: -15px;
+	}
 }
